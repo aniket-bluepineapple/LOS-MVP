@@ -19,6 +19,7 @@ setErrors: Dispatch<SetStateAction<Partial<FormValues>>>
     const value = inputValue?.trim()
 
     switch (name) {
+      //Personal Details
       case "firstName":
         if(!value){
             error = "Please enter a valid first name";
@@ -45,6 +46,35 @@ setErrors: Dispatch<SetStateAction<Partial<FormValues>>>
           }
         }
         break;
+        case "phone":
+          if (!PHONE_REGEX.exec(value)) {
+            error = "Please enter a 10 digit valid Phone number";
+          } 
+          break;
+        case "email":
+          if (!EMAIL_REGEX.exec(value)) {
+              error = "Please enter a valid Email";
+          } 
+          break;
+        case 'maritalStatus':
+          if (!value) {
+              error = "Please select marital status";
+          }
+          break;
+        case 'dependents':
+            if (!NUMBER_REGEX.exec(value)) {
+              error = "Please enter number of dependents";
+           }
+           break;
+        case 'address':
+          if (!value) {
+              error = "Please enter address";
+          } else if(!PINCODE_REGEX.exec(value)){
+            error = "Please enter a valid pincode"
+          }
+        break;
+
+        // KYC
       case "aadhar":
         if (!AADHAR_REGEX.exec(value)) {
           error = "Please enter 12-digit valid aadhar number";
@@ -55,21 +85,11 @@ setErrors: Dispatch<SetStateAction<Partial<FormValues>>>
           error = "Please enter a valid PAN number";
         } 
         break;
-      case "phone":
-        if (!PHONE_REGEX.exec(value)) {
-          error = "Please enter a 10 digit valid Phone number";
-        } 
-        break;
-      case "email":
-        if (!EMAIL_REGEX.exec(value)) {
-            error = "Please enter a valid Email";
-        } 
-        break;
-      case 'maritalStatus':
-        console.log(value,"value")
+
+       // Employment Details
+        case 'employmentNature':
         if (!value) {
-          console.log("Inside")
-            error = "Please select marital status";
+            error = "Please select employment nature";
         }
         break;
       case 'monthlyIncome':
@@ -77,34 +97,21 @@ setErrors: Dispatch<SetStateAction<Partial<FormValues>>>
             error = "Please enter valid amount";
         }
         break;
-      case 'dependents':
-        if (!NUMBER_REGEX.exec(value)) {
-          error = "Please enter number of dependents";
-       }
+      case 'companyname':
+        break;
+      case 'companyaddress':
+        if(value && !PINCODE_REGEX.exec(value)){
+          error = "Please enter a valid pincode";
+        }
+        break;
+      case 'experience':
+        if (value && !NUMBER_REGEX.exec(value)) {
+          error = "Please enter experience in years";
+        }
        break;
-      case 'street':
-        if (!value) {
-          error = "Please enter street";
-        }
-        break;
-      case 'city':
-        if (!ALPA_REGEX.exec(value)) {
-          error = "Please enter valid city name";
-        }
-        break;
-        case 'district':
-        if (!ALPA_REGEX.exec(value)) {
-          error = "Please enter valid district name";
-        }
-        break;
-        case 'state':
-        if (!ALPA_REGEX.exec(value)) {
-          error = "Please enter valid state name";
-        }
-        break;
-        case 'pincode':
-        if (!PINCODE_REGEX.exec(value)) {
-          error = "Please enter valid pincode";
+      case 'officialEmail':
+        if (value && !EMAIL_REGEX.exec(value)) {
+          error = "Please enter valid official email";
         }
         break;
       default:

@@ -1,37 +1,18 @@
 'use client'
 
-import { ChangeEvent, FocusEvent, FormEvent, FunctionComponent, useEffect, useState } from "react";
-import { FormValues, UserApplicationProps } from "./types";
+import { ChangeEvent, FocusEvent, FunctionComponent, useEffect, useState } from "react";
+import { FormValues, UserApplicationProps, defaultFormValues } from "./types";
 import { validateField } from "./validate-field";
+import { validateFile } from "./validate-file";
+import { handleSubmit } from "./handle-submit";
 
 const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
-  const [values, setValues] = useState<FormValues>({
-    firstName: "",
-    lastName: "",
-    dob: "",
-    aadhar: "",
-    pan: "",
-    aadharFile: null,
-    panFile: null,
-    phone: "",
-    email: "",
-    dependents:'',
-    maritalStatus: "",
-    monthlyIncome: "",
-    incomeProof: null,
-    addressProof:  null,
-    street: '',
-    city: '',
-    district: '',
-    state: '',
-    pincode: ''
-  });
-
+  const [values, setValues] = useState<FormValues>(defaultFormValues);
   const [errors, setErrors] = useState<Partial<FormValues>>({});
-
   const [aadharPreview, setAadharPreview] = useState<string | null>(null);
   const [panPreview, setPanPreview] = useState<string | null>(null);
   const [addressPreview, setAddressPreview] = useState<string | null>(null);
+  const [incomePreview, setIncomePreview] = useState<string | null>(null);
 
   useEffect(()=>{
     if(data){
@@ -44,19 +25,6 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
   minDate.setFullYear(today.getFullYear() - 60);
   const maxDate = new Date();
   maxDate.setFullYear(today.getFullYear() - 18);
-
-  const validateFile = (file: File) => {
-    const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
-    const maxSize = 1 * 1024 * 1024; // 1MB
-
-    if (!allowedTypes.includes(file.type)) {
-      return "Only PDF, PNG, and JPEG files are allowed.";
-    }
-    if (file.size > maxSize) {
-      return "File size must be less than 1MB.";
-    }
-    return "";
-  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -86,6 +54,9 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
           else if (name === "addressProof") {
             setAddressPreview(URL.createObjectURL(file));
           }
+          else if (name === "incomeProof") {
+            setIncomePreview(URL.createObjectURL(file));
+          }
         } else {
           if (name === "aadharFile") {
             setAadharPreview(fileReader.result as string);
@@ -94,6 +65,9 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
           }
           else if (name === "addressProof") {
             setAddressPreview(fileReader.result as string);
+          }
+          else if (name === "incomeProof") {
+            setIncomePreview(fileReader.result as string);
           }
         }
       };
@@ -106,29 +80,15 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
     validateField(name as keyof FormValues, value, values, setErrors);
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    let isValid = true;
-    Object.keys(values).forEach((key) => {
-      if (!values[key as keyof FormValues]) {
-        validateField(key as keyof FormValues, "", values, setErrors);
-        isValid = false;
-      }
-    });
-    if (isValid) {
-      alert("Form submitted successfully!");
-    }
-  };
-
   return (
-    <div className="max-w-screen-md w-full mx-auto p-6 shadow-lg rounded-2xl border-2 my-12">
+    <div className="max-w-screen-md w-full mx-2 md:mx-auto p-6 shadow-lg rounded-2xl border-2 border-[#cadcfc] my-12">
       <ul><li><h2 className="text-xl font-bold mb-8">Personal Details</h2></li></ul>
       
-      <form className="space-y-4" onSubmit={handleSubmit}>
+      <form className="space-y-4" onSubmit={(event) => {handleSubmit(event, values , setErrors)}}>
         {/* Row 1 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="firstName" className="block font-medium">First Name</label>
+            <label htmlFor="firstName" className="block font-medium">First Name*</label>
             <input
               type="text"
               id="firstName"
@@ -136,12 +96,13 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
               value={values.firstName}
               onChange={handleChange}
               onBlur={handleBlur}
+              required
               className="w-full p-2 border rounded border-[#00246b]"
             />
             {errors.firstName && <div className="text-red-500">{errors.firstName}</div>}
           </div>
           <div>
-            <label htmlFor="lastName" className="block font-medium">Last Name</label>
+            <label htmlFor="lastName" className="block font-medium">Last Name*</label>
             <input
               type="text"
               id="lastName"
@@ -149,6 +110,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
               value={values.lastName}
               onChange={handleChange}
               onBlur={handleBlur}
+              required
               className="w-full p-2 border rounded border-[#00246b]"
             />
             {errors.lastName && <div className="text-red-500">{errors.lastName}</div>}
@@ -156,9 +118,9 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
         </div>
 
         {/* Row 2 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="dob" className="block font-medium">Date of Birth</label>
+            <label htmlFor="dob" className="block font-medium">Date of Birth*</label>
             <input
               type="date"
               id="dob"
@@ -166,6 +128,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
               value={values.dob}
               onChange={handleChange}
               onBlur={handleBlur}
+              required
               max={maxDate.toISOString().split("T")[0]}
               min={minDate.toISOString().split("T")[0]}
               className="w-full p-2 border rounded border-[#00246b]"
@@ -173,7 +136,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
             {errors.dob && <div className="text-red-500">{errors.dob}</div>}
           </div>
           <div>
-            <label htmlFor="dependents" className="block font-medium">Number of dependents</label>
+            <label htmlFor="dependents" className="block font-medium">Number of dependents*</label>
             <input
               type="number"
               id="dependents"
@@ -181,6 +144,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
               value={values.dependents}
               onChange={handleChange}
               onBlur={handleBlur}
+              required
               min={0}
               className="w-full p-2 border rounded border-[#00246b]"
             />
@@ -190,9 +154,9 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
         </div>
         
         {/* Row 3 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-          <label htmlFor="phone" className="block font-medium">Phone Number</label>
+          <label htmlFor="phone" className="block font-medium">Phone Number*</label>
           <input
             type="number"
             id="phone"
@@ -200,12 +164,13 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
             value={values.phone}
             onChange={handleChange}
             onBlur={handleBlur}
+            required
             className="w-full p-2 border rounded border-[#00246b]"
           />
           {errors.phone && <div className="text-red-500">{errors.phone}</div>}
         </div>
         <div>
-          <label htmlFor="email" className="block font-medium">Email</label>
+          <label htmlFor="email" className="block font-medium">Email*</label>
           <input
             type="email"
             id="email"
@@ -213,15 +178,43 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
             value={values.email}
             onChange={handleChange}
             onBlur={handleBlur}
+            required
             className="w-full p-2 border rounded border-[#00246b]"
           />
           {errors.email && <div className="text-red-500">{errors.email}</div>}
         </div>
         </div>
 
-        {/* Row 4 */}
         <div className="w-full">
-          <label htmlFor="maritalStatus" className="block font-medium mb-4">Marital Status</label>
+          <div>
+            <label htmlFor="address" className="block font-medium">Residential Address (with pincode)*</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={values.address}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+              className="w-full p-2 h-[48px] border rounded border-[#00246b]"
+            />
+            {errors.address && <div className="text-red-500">{errors.address}</div>}
+          </div>  
+        </div>
+
+        {/* Row 4 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="addressProof" className="block font-medium">Upload Address Proof*</label>
+          <input type="file" id="addressProof" name="addressProof" onChange={handleFileChange} required className="w-full p-2  border rounded border-[#00246b]" />
+          {addressPreview && (values.addressProof?.type === "application/pdf" ? (
+            <a href={addressPreview} target="_blank" rel="noopener noreferrer" className="mt-2 text-blue-500 underline">View Uploaded Address Proof</a>
+          ) : (
+            <img src={addressPreview} alt="Address Preview" className="mt-2 w-10 h-10 object-cover" />
+          ))}
+         </div>
+          <div>
+            <label htmlFor="maritalStatus" className="block font-medium mb-4">Marital Status*</label>
            <div className="flex justify-start gap-x-20" >
             <label htmlFor="maritalStatusSingle" className="font-medium"> 
            <input
@@ -255,15 +248,16 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
           </label>
           </div>
            
-          {errors.maritalStatus && <div className="text-red-500">{errors.maritalStatus}</div>}
+          {errors.maritalStatus && <div className="text-red-500">{errors.maritalStatus}</div>}</div>
+          
         </div>
         
         <ul><li><h2 className="text-xl font-bold mb-10 mt-12">KYC Details</h2></li></ul>
 
         {/* Row 5 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="aadhar" className="block font-medium">Aadhar Number</label>
+            <label htmlFor="aadhar" className="block font-medium">Aadhar Number*</label>
             <input
               type="text"
               id="aadhar"
@@ -271,13 +265,14 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
               value={values.aadhar}
               onChange={handleChange}
               onBlur={handleBlur}
+              required
               className="w-full p-2 border rounded border-[#00246b]"
             />
             {errors.aadhar && <div className="text-red-500">{errors.aadhar}</div>}
           </div>
           <div>
 
-          <label htmlFor="pan" className="block font-medium">PAN Number</label>
+          <label htmlFor="pan" className="block font-medium">PAN Number*</label>
           <input
             type="text"
             id="pan"
@@ -285,6 +280,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
             value={values.pan}
             onChange={handleChange}
             onBlur={handleBlur}
+            required
             className="w-full p-2 border rounded uppercase border-[#00246b]"
           />
            {errors.pan && <div className="text-red-500">{errors.pan}</div>}
@@ -293,10 +289,10 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
         </div>
 
         {/* Row 6 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-          <label htmlFor="aadharFile" className="block font-medium">Upload Aadhar</label>
-          <input type="file" id="aadharFile" name="aadharFile" onChange={handleFileChange} className="w-full p-2 border rounded border-[#00246b]" />
+          <label htmlFor="aadharFile" className="block font-medium">Upload Aadhar*</label>
+          <input type="file" id="aadharFile" name="aadharFile" onChange={handleFileChange} required className="w-full p-2 border rounded border-[#00246b]" />
           {aadharPreview && (values.aadharFile?.type === "application/pdf" ? (
             <a href={aadharPreview} target="_blank" rel="noopener noreferrer" className="mt-2 text-blue-500 underline">View Uploaded Aadhar PDF</a>
           ) : (
@@ -304,8 +300,8 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
           ))}
         </div>
         <div>
-          <label htmlFor="panFile" className="block font-medium">Upload PAN</label>
-          <input type="file" id="panFile" name="panFile" onChange={handleFileChange} className="w-full p-2  border rounded border-[#00246b]" />
+          <label htmlFor="panFile" className="block font-medium">Upload PAN*</label>
+          <input type="file" id="panFile" name="panFile" onChange={handleFileChange} required className="w-full p-2  border rounded border-[#00246b]" />
           {panPreview && (values.panFile?.type === "application/pdf" ? (
             <a href={panPreview} target="_blank" rel="noopener noreferrer" className="mt-2 text-blue-500 underline">View Uploaded PAN PDF</a>
           ) : (
@@ -315,98 +311,139 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({data}) => {
 
         </div>
         
-        <ul><li><h2 className="text-xl font-bold mb-10 mt-12">Address</h2></li></ul>
+        <ul><li><h2 className="text-xl font-bold mb-10 mt-12">Employment Details</h2></li></ul>
      
         {/* Row 7 */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="street" className="block font-medium">House, Street and Locality</label>
-            <input
-              type="text"
-              id="street"
-              name="street"
-              value={values.street}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="w-full p-2 border rounded border-[#00246b]"
-            />
-            {errors.street && <div className="text-red-500">{errors.street}</div>}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="employmentNature" className="block font-medium mb-4">Employment Nature*</label>
+           <div className="flex justify-start gap-x-20" >
+             <label htmlFor="employmentNatureSalaried" className="font-medium"> 
+             <input
+              type="radio"
+              id="employmentNatureSalaried"
+              name="employmentNature"
+              value='salaried'
+              checked={values.employmentNature === "salaried"}
+              onChange={(e) => {
+                handleChange(e);
+                handleBlur(e);
+              }}
+              className="p-2 mr-4 border rounded uppercase border-[#00246b] cursor-pointer"
+           />
+           Salaried
+          </label>
+          
+          <label htmlFor="employmentNatureSelfEmployed" className="font-medium"> <input
+            type="radio"
+            id="employmentNatureSelfEmployed"
+            name="employmentNature"
+            value='self-employed'
+            checked={values.employmentNature === "self-employed"}
+            onChange={(e) => {
+              handleChange(e);
+              handleBlur(e);
+            }}
+            className="p-2 mr-4 border rounded uppercase border-[#00246b] cursor-pointer"
+          />
+           Self Employed
+          </label>
           </div>
+          {errors.employmentNature && <div className="text-red-500">{errors.employmentNature}</div>}</div>
+
           <div>
-            <label htmlFor="city" className="block font-medium">City</label>
+            <label htmlFor="monthlyIncome" className="block font-medium">Monthly Income*</label>
             <input
-              type="text"
-              id="city"
-              name="city"
-              value={values.city}
+              type="number"
+              id="monthlyIncome"
+              name="monthlyIncome"
+              value={values.monthlyIncome}
               onChange={handleChange}
               onBlur={handleBlur}
+              required
               className="w-full p-2 border rounded border-[#00246b]"
             />
-            {errors.city && <div className="text-red-500">{errors.city}</div>}
+            {errors.monthlyIncome && <div className="text-red-500">{errors.monthlyIncome}</div>}
           </div>
         </div>
 
         {/* Row 8 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="district" className="block font-medium">District</label>
+            <label htmlFor="companyname" className="block font-medium">Company Name</label>
             <input
               type="text"
-              id="district"
-              name="district"
-              value={values.district}
+              id="companyname"
+              name="companyname"
+              value={values.companyname}
               onChange={handleChange}
               onBlur={handleBlur}
               className="w-full p-2 border rounded border-[#00246b]"
             />
-            {errors.district && <div className="text-red-500">{errors.district}</div>}
+            {errors.companyname && <div className="text-red-500">{errors.companyname}</div>}
           </div>
           <div>
-            <label htmlFor="state" className="block font-medium">State</label>
+            <label htmlFor="experience" className="block font-medium">Experience (in years)</label>
             <input
-              type="text"
-              id="state"
-              name="state"
-              value={values.state}
+              type="number"
+              id="experience"
+              name="experience"
+              value={values.experience}
               onChange={handleChange}
               onBlur={handleBlur}
+              min={0}
               className="w-full p-2 border rounded border-[#00246b]"
             />
-            {errors.state && <div className="text-red-500">{errors.state}</div>}
+            {errors.experience && <div className="text-red-500">{errors.experience}</div>}
           </div>
         </div>
 
         {/* Row 9 */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="w-full">
           <div>
-            <label htmlFor="pincode" className="block font-medium">Pincode</label>
+            <label htmlFor="companyaddress" className="block font-medium">Company Address (with pincode)</label>
             <input
               type="text"
-              id="pincode"
-              name="pincode"
-              value={values.pincode}
+              id="companyaddress"
+              name="companyaddress"
+              value={values.companyaddress}
               onChange={handleChange}
               onBlur={handleBlur}
               className="w-full p-2 h-[48px] border rounded border-[#00246b]"
             />
-            {errors.pincode && <div className="text-red-500">{errors.pincode}</div>}
+            {errors.companyaddress && <div className="text-red-500">{errors.companyaddress}</div>}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="officialEmail" className="block font-medium">Official Email</label>
+            <input
+              type="text"
+              id="officialEmail"
+              name="officialEmail"
+              value={values.officialEmail}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="w-full p-2 h-[48px] border rounded border-[#00246b]"
+            />
+            {errors.officialEmail && <div className="text-red-500">{errors.officialEmail}</div>}
           </div>
           <div>
-          <label htmlFor="addressProof" className="block font-medium">Upload Address Proof</label>
-          <input type="file" id="addressProof" name="addressProof" onChange={handleFileChange} className="w-full p-2  border rounded border-[#00246b]" />
-          {addressPreview && (values.addressProof?.type === "application/pdf" ? (
-            <a href={addressPreview} target="_blank" rel="noopener noreferrer" className="mt-2 text-blue-500 underline">View Uploaded Address Proof</a>
+          <label htmlFor="incomeProof" className="block font-medium">Upload Income Proof*</label>
+          <input type="file" id="incomeProof" name="incomeProof" onChange={handleFileChange} required className="w-full p-2  border rounded border-[#00246b]" />
+          {incomePreview && (values.incomeProof?.type === "application/pdf" ? (
+            <a href={incomePreview} target="_blank" rel="noopener noreferrer" className="mt-2 text-blue-500 underline">View Uploaded Address Proof</a>
           ) : (
-            <img src={addressPreview} alt="Address Preview" className="mt-2 w-10 h-10 object-cover" />
+            <img src={incomePreview} alt="Address Preview" className="mt-2 w-10 h-10 object-cover" />
           ))}
-        </div>
+         </div>
         </div>
         
-      <div className="w-full flex justify-center items-center h-20">
-        <button type="submit" className="w-full max-w-[50%] h-10 p-2 hover:bg-[#cadcfc] hover:text-[#00246b] rounded bg-[#00246b] text-[#cadcfc]">
-          Submit
-        </button>
+        <div className="w-full flex justify-center items-center h-20">
+          <button type="submit" className="w-full max-w-[50%] h-10 p-2 hover:bg-[#cadcfc] hover:text-[#00246b] rounded bg-[#00246b] text-[#cadcfc]">
+            Submit
+          </button>
         </div>
         
       </form>

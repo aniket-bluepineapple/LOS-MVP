@@ -2,22 +2,25 @@ export interface FormValues {
     firstName: string;
     lastName: string;
     dob: string;
-    aadhar: string;
-    pan: string;
-    aadharFile: File | null;
-    panFile: File | null;
     phone: string;
     email: string;
     dependents: string
     maritalStatus: string;
+    address: string;
+    addressProof: File | null;
+
+    aadhar: string;
+    pan: string;
+    aadharFile: File | null;
+    panFile: File | null;
+
+    employmentNature:string;
     monthlyIncome: string;
     incomeProof: File | null;
-    addressProof: File | null;
-    street: string;
-    city: string;
-    district: string;
-    state: string;
-    pincode: string;
+    companyname: string
+    companyaddress: string
+    experience: string
+    officialEmail: string
 }
 
 export type UserApplicationProps ={
@@ -25,3 +28,28 @@ export type UserApplicationProps ={
         [key: string]: any
       }
 }
+
+export const defaultFormValues = {
+    firstName: "",
+    lastName: "",
+    dob: "",
+    phone: "",
+    email: "",
+    dependents:'',
+    maritalStatus: "",
+    address:'',
+    addressProof:  null,
+
+    aadhar: "",
+    pan: "",
+    aadharFile: null,
+    panFile: null,
+
+    employmentNature: "",
+    companyname: "",
+    monthlyIncome: "",
+    incomeProof: null,
+    experience: "",
+    companyaddress: "",
+    officialEmail: ""
+  }
