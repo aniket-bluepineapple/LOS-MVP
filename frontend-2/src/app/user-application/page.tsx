@@ -1,25 +1,22 @@
 import UserApplication from "../client/user-application";
 
 export interface ISinglePageProps {
-    params: { slug: string }
-  }
-
-async function getUserApplicationPageData(slug: string) {
-    //Perform BE fetching operatioins here
-    return {slug}
+  params: { slug: string };
 }
 
-export default async function UserApplicationPage(props: Readonly<ISinglePageProps>) {
-    const {
-        params: { slug }
-      } = props
+async function getUserApplicationPageData(slug: string) {
+  //Perform BE fetching operatioins here
+  return { slug };
+}
 
-    const data = await getUserApplicationPageData(slug)
+export default async function UserApplicationPage(
+  props: Readonly<ISinglePageProps>,
+) {
+  const {
+    params: { slug },
+  } = props;
 
-    return (
-      <UserApplication data={data}/>
-    );
-  };
-  
+  const data = await getUserApplicationPageData(slug);
 
-  
+  return <UserApplication data={data} />;
+}

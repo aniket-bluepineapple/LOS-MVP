@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { FormValues } from "./types";
-import { AADHAR_REGEX, ALPA_REGEX, EMAIL_REGEX, NUMBER_REGEX, PAN_REGEX, PHONE_REGEX, PINCODE_REGEX } from "./constants";
+import { FormValues } from "../types";
+import { AADHAR_REGEX, ALPA_REGEX, EMAIL_REGEX, MAX_DATE, MIN_DATE, NUMBER_REGEX, PAN_REGEX, PHONE_REGEX, PINCODE_REGEX } from "../constants";
 
 export const validateField = (
 name: keyof FormValues, 
@@ -8,12 +8,6 @@ inputValue: string,
 values:FormValues, 
 setErrors: Dispatch<SetStateAction<Partial<FormValues>>>
 ) => {
-    const today = new Date();
-    const minDate = new Date();
-    minDate.setFullYear(today.getFullYear() - 60);
-    const maxDate = new Date();
-    maxDate.setFullYear(today.getFullYear() - 18);
-
     let error = "";
 
     const value = inputValue?.trim()
@@ -41,7 +35,7 @@ setErrors: Dispatch<SetStateAction<Partial<FormValues>>>
           error = "Please select Date of Birth";
         } else{
           const selectedDate = new Date(value);
-          if (selectedDate > maxDate || selectedDate < minDate) {
+          if (selectedDate > MAX_DATE || selectedDate < MIN_DATE) {
             error = "User must be at least 18 years old and less than 60 years old";
           }
         }

@@ -8,19 +8,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Blue Loans",
+  title: "Bluedreams Finance",
   description: "System to get the consumer loan",
 };
 
 const Header = () => (
-  <header className="bg-[#00246b] text-white py-6 px-6 shadow-md">
-    <h1 className="text-2xl font-bold text-[#cadcfc]">Blue Loans</h1>
+  <header className="bg-[#00246b] px-6 py-6 text-white shadow-md">
+    <h1 className="text-2xl font-bold text-[#cadcfc]">Bluedreams Finance</h1>
   </header>
 );
 
 const Footer = () => (
-  <footer className="bg-[#00246b] text-white py-4 px-6 text-center mt-8">
-    <p className="text-[#cadcfc]">&copy; {new Date().getFullYear()} Blue Loans. All rights reserved.</p>
+  <footer className="mt-8 bg-[#00246b] px-6 py-4 text-center text-white">
+    <p className="text-[#cadcfc]">
+      &copy; {new Date().getFullYear()} Bluedreams Finance. All rights reserved.
+    </p>
   </footer>
 );
 
@@ -32,10 +34,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable}`}>
-        <Header/>
-        <main className="min-h-[85vh] flex justify-center items-center w-full">{children}</main>
-        <Footer/>
-        </body>
+        <Header />
+        <main className="flex min-h-[85vh] w-full items-center justify-center">
+          {children}
+        </main>
+        <Footer />
+      </body>
     </html>
   );
 }
