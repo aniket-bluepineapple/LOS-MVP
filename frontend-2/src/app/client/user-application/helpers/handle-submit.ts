@@ -1,6 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from "react";
 import { validateField } from "./validate-field";
-import { FormValues } from "./types";
+import { FormValues } from "../types";
 
 export const handleSubmit = (e: FormEvent, values:FormValues, setErrors:Dispatch<SetStateAction<Partial<FormValues>>>) => {
     e.preventDefault();
