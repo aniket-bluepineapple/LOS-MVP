@@ -4,9 +4,9 @@ from los.models import db
 from los.api.role_routes import role_bp
 from los.api.user_routes import user_bp
 from los.api.login_routes import login_bp
-from los.api.address_routes import address_bp  # Import Address routes
-from los.api.document_routes import document_bp  # Import Document routes
-from los.api.product_routes import product_bp  # Import Product routes
+from los.api.address_routes import address_bp
+from los.api.document_routes import document_bp
+from los.api.product_routes import product_bp
 from los.api.loan_offer_routes import loan_offer_bp
 from los.api.loan_application_routes import loan_application_bp
 from los.api.credit_score_routes import credit_score_bp
@@ -24,8 +24,8 @@ def create_app():
     app.register_blueprint(user_bp)
     app.register_blueprint(login_bp)
     app.register_blueprint(address_bp)
-    app.register_blueprint(document_bp)  # Register Document routes
-    app.register_blueprint(product_bp)  # Register Product routes
+    app.register_blueprint(document_bp)
+    app.register_blueprint(product_bp)
     app.register_blueprint(loan_offer_bp)
     app.register_blueprint(loan_application_bp)
     app.register_blueprint(credit_score_bp)
