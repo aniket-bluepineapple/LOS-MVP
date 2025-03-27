@@ -6,7 +6,13 @@ export interface FormValues {
   email: string;
   dependents: string;
   maritalStatus: string;
-  address: string;
+
+  street: string;
+  city: string;
+  district: string;
+  state: string;
+  pincode: string;
+  addressType: string;
   addressProof: File | null;
 
   aadhar: string;
@@ -37,7 +43,13 @@ export const defaultFormValues = {
   email: "",
   dependents: "",
   maritalStatus: "",
-  address: "",
+
+  street: "",
+  city: "",
+  district: "",
+  state: "",
+  pincode: "",
+  addressType: "",
   addressProof: null,
 
   aadhar: "",
