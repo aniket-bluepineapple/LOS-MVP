@@ -14,6 +14,7 @@ import { handleSubmit } from "./helpers/handle-submit";
 import PersonalDetails from "./personal-details";
 import KYCDetails from "./kyc-details";
 import EmploymentDetails from "./employment-details";
+import ResedentialAddress from "./resedential-address";
 
 const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
   const [values, setValues] = useState<FormValues>(defaultFormValues);
@@ -90,6 +91,13 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
         }}
       >
         <PersonalDetails
+          values={values}
+          errors={errors}
+          handleBlur={handleBlur}
+          handleChange={handleChange}
+        />
+
+        <ResedentialAddress
           values={values}
           errors={errors}
           addressPreview={addressPreview}

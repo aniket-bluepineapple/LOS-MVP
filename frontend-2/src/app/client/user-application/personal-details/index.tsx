@@ -7,10 +7,8 @@ import { MAX_DATE, MIN_DATE } from "../constants";
 const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
   values,
   errors,
-  addressPreview,
   handleChange,
   handleBlur,
-  handleFileChange,
 }) => {
   return (
     <>
@@ -136,60 +134,8 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
         </div>
       </div>
 
-      {/* Row 4 */}
-      <div className="w-full">
-        <div>
-          <label htmlFor="address" className="block font-medium">
-            Residential Address (with pincode)*
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={values.address}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            required
-            className="h-[48px] w-full rounded border border-[#cadcfc] p-2"
-          />
-          {errors.address && (
-            <div className="text-red-400">{errors.address}</div>
-          )}
-        </div>
-      </div>
-
       {/* Row 5 */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div>
-          <label htmlFor="addressProof" className="block font-medium">
-            Upload Address Proof*
-          </label>
-          <input
-            type="file"
-            id="addressProof"
-            name="addressProof"
-            onChange={handleFileChange}
-            required
-            className="w-full rounded border border-[#cadcfc] p-2"
-          />
-          {addressPreview &&
-            (values.addressProof?.type === "application/pdf" ? (
-              <a
-                href={addressPreview}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 text-blue-500 underline"
-              >
-                View Uploaded Address Proof
-              </a>
-            ) : (
-              <img
-                src={addressPreview}
-                alt="Address Preview"
-                className="mt-2 h-10 w-10 object-cover"
-              />
-            ))}
-        </div>
         <div>
           <label htmlFor="maritalStatus" className="mb-4 block font-medium">
             Marital Status*
@@ -240,12 +186,10 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
 export type PersonalDetailsProps = {
   values: FormValues;
   errors: Partial<FormValues>;
-  addressPreview: string | null;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (
     e: FocusEvent<HTMLInputElement> | ChangeEvent<HTMLInputElement>,
   ) => void;
-  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default PersonalDetails;
