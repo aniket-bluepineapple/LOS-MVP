@@ -50,7 +50,8 @@ const SignUp = () => {
       } else {
         setError(result.error || "Failed to sign up");
       }
-    } catch (err) {
+    } catch (error) {
+      console.log(error)
       setError("An error occurred");
     }
   };

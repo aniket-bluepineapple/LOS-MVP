@@ -18,7 +18,7 @@ import ResedentialAddress from "./resedential-address";
 
 const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
   const [values, setValues] = useState<FormValues>(defaultFormValues);
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const [errors, setErrors] = useState<Partial<FormValues>>({});
   const [aadharPreview, setAadharPreview] = useState<string | null>(null);
   const [panPreview, setPanPreview] = useState<string | null>(null);
@@ -30,7 +30,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
     const storedUsername = localStorage.getItem("username");
 
     if (storedUsername) {
-      setUsername(storedUsername);
+      // setUsername(storedUsername);
 
     //   // Fetch user data from API
     //   fetch(`/api/user?username=${storedUsername}`)

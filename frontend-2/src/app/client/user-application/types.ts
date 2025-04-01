@@ -33,7 +33,7 @@ export interface FormValues {
 
 export type UserApplicationProps = {
   data: {
-    [key: string]: any;
+    [key: string]: string;
   };
 };
 
