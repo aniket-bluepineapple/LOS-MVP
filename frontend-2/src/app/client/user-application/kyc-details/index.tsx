@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FocusEvent, FunctionComponent } from "react";
 import { FormValues } from "../types";
+import DocumentPreview from "@/common/document-preview";
 
 const KYCDetails: FunctionComponent<KYCDetailsProps> = ({
   values,
@@ -70,23 +71,7 @@ const KYCDetails: FunctionComponent<KYCDetailsProps> = ({
             required
             className="w-full rounded border border-[#cadcfc] p-2"
           />
-          {aadharPreview &&
-            (values.aadharFile?.type === "application/pdf" ? (
-              <a
-                href={aadharPreview}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 text-blue-500 underline"
-              >
-                View Uploaded Aadhar PDF
-              </a>
-            ) : (
-              <img
-                src={aadharPreview}
-                alt="Aadhar Preview"
-                className="mt-2 h-10 w-10 object-cover"
-              />
-            ))}
+          <DocumentPreview docPreview={aadharPreview} previewText={`View Uploaded Aadhar PDF`}/>
         </div>
         <div>
           <label htmlFor="panFile" className="block font-medium">
@@ -100,23 +85,7 @@ const KYCDetails: FunctionComponent<KYCDetailsProps> = ({
             required
             className="w-full rounded border border-[#cadcfc] p-2"
           />
-          {panPreview &&
-            (values.panFile?.type === "application/pdf" ? (
-              <a
-                href={panPreview}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 text-blue-500 underline"
-              >
-                View Uploaded PAN PDF
-              </a>
-            ) : (
-              <img
-                src={panPreview}
-                alt="PAN Preview"
-                className="mt-2 h-10 w-10 object-cover"
-              />
-            ))}
+          <DocumentPreview docPreview={panPreview} previewText={`View Uploaded PAN PDF`}/>
         </div>
       </div>
     </>

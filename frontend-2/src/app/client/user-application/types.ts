@@ -4,6 +4,8 @@ export interface FormValues {
   dob: string;
   phone: string;
   email: string;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
   dependents: string;
   maritalStatus: string;
 
@@ -41,6 +43,8 @@ export const defaultFormValues = {
   dob: "",
   phone: "",
   email: "",
+  isEmailVerified: false,
+  isPhoneVerified: false,
   dependents: "",
   maritalStatus: "",
 

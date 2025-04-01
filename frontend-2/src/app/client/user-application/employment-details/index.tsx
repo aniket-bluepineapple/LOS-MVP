@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FocusEvent, FunctionComponent } from "react";
 import { FormValues } from "../types";
+import DocumentPreview from "@/common/document-preview";
 
 const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
   values,
@@ -177,23 +178,7 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
             required
             className="w-full rounded border border-[#cadcfc] p-2"
           />
-          {incomePreview &&
-            (values.incomeProof?.type === "application/pdf" ? (
-              <a
-                href={incomePreview}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 text-blue-500 underline"
-              >
-                View Uploaded Income Proof
-              </a>
-            ) : (
-              <img
-                src={incomePreview}
-                alt="Address Preview"
-                className="mt-2 h-10 w-10 object-cover"
-              />
-            ))}
+          <DocumentPreview docPreview={incomePreview} previewText={`View Uploaded Income Proof`}/>
         </div>
       </div>
     </>

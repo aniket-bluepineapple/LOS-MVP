@@ -54,9 +54,19 @@ export const validateField = (
         error = "Please enter a 10 digit valid Phone number";
       }
       break;
+    case "isPhoneVerified":
+      if (!value) {
+        error = "Please verify phone number";
+      }
+      break;
     case "email":
       if (!EMAIL_REGEX.exec(value)) {
         error = "Please enter a valid Email";
+      }
+      break;
+    case "isEmailVerified":
+      if (!value) {
+        error = "Please verify email";
       }
       break;
     case "maritalStatus":

@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FocusEvent, FunctionComponent } from "react";
 import { FormValues } from "../types";
+import DocumentPreview from "@/common/document-preview";
 
 const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
   values,
@@ -168,25 +169,9 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             name="addressProof"
             onChange={handleFileChange}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded border border-[#cadcfc] p-2 cursor-pointer"
           />
-          {addressPreview &&
-            (values.addressProof?.type === "application/pdf" ? (
-              <a
-                href={addressPreview}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 text-blue-500 underline"
-              >
-                View Uploaded Address Proof
-              </a>
-            ) : (
-              <img
-                src={addressPreview}
-                alt="Address Preview"
-                className="mt-2 h-10 w-10 object-cover"
-              />
-            ))}
+          <DocumentPreview docPreview={addressPreview} previewText={`View Uploaded Address Proof`}/>
         </div>
       </div>
     </>
