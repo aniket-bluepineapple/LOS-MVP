@@ -31,12 +31,11 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
 
     if (storedUsername) {
       // setUsername(storedUsername);
-
-    //   // Fetch user data from API
-    //   fetch(`/api/user?username=${storedUsername}`)
-    //     .then((res) => res.json())
-    //     .then((data) => setUserData(data))
-    //     .catch((err) => console.error("Error fetching user data:", err));
+      //   // Fetch user data from API
+      //   fetch(`/api/user?username=${storedUsername}`)
+      //     .then((res) => res.json())
+      //     .then((data) => setUserData(data))
+      //     .catch((err) => console.error("Error fetching user data:", err));
     }
   }, []);
 
