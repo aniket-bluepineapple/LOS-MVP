@@ -1,7 +1,10 @@
 from flask import Blueprint, request, jsonify
 from los.models import db, User
 
+from flask_cors import CORS
+
 user_bp = Blueprint("user", __name__, url_prefix="/api/users")
+CORS(user_bp)
 
 # Create a new user
 @user_bp.route("/", methods=["POST"])

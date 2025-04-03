@@ -2,8 +2,11 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime
 from los.models import db, LoanApplication, User, Product, LoanOffer
 
+from flask_cors import CORS
+
 loan_application_bp = Blueprint("loan_application", __name__, url_prefix="/api/loan_applications")
 
+CORS(loan_application_bp)
 
 # Create a new loan application
 @loan_application_bp.route("/", methods=["POST"])
