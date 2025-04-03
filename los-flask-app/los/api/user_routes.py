@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, current_app
 from los.models import db, User
 from flask_cors import CORS, cross_origin
 import os
-from werkzeug.utils import secure_filename
 import uuid
 
 UPLOAD_FOLDER = "uploads"
@@ -14,7 +13,7 @@ CORS(user_bp)
 @user_bp.route("/", methods=["OPTIONS"])
 @cross_origin()
 def options():
-    print("\n⚠️ Handling preflight request")
+    print("\n Handling preflight request")
     response = jsonify({"message": "CORS preflight response"})
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
@@ -30,7 +29,7 @@ def create_user():
     files = request.files
 
     # Validate required fields
-    required_fields = ["Name", "Email", "AadharNo", "PAN", "RoleID"]
+    required_fields = ["FirstName", "LastName", "Email", "AadharNo", "PAN", "RoleID"]
     if not all(field in data and data[field] for field in required_fields):
         return jsonify({"message": "Missing required fields"}), 400
 
@@ -46,9 +45,11 @@ def create_user():
 
     aadhar_doc_path = save_file(files.get("AadharUploadDoc"), "aadhar")
     pan_doc_path = save_file(files.get("PANUploadDoc"), "pan")
+    income_proof_doc_path = save_file(files.get("IncomeProofDoc"), "income_proof")
 
     new_user = User(
-        Name=data["Name"],
+        FirstName=data["FirstName"],
+        LastName=data["LastName"],
         Email=data["Email"],
         Phone=data.get("Phone"),
         DOB=data.get("DOB"),
@@ -56,8 +57,9 @@ def create_user():
         PAN=data["PAN"],
         AadharUploadDoc=aadhar_doc_path,
         PANUploadDoc=pan_doc_path,
-        AadharVerified=data.get("AadharVerified", False),
-        PANVerified=data.get("PANVerified", False),
+        IncomeProofDoc=income_proof_doc_path,
+        PhoneVerified=data.get("PhoneVerified", False),
+        EmailVerified=data.get("EmailVerified", False),
         MonthlyIncome=data.get("MonthlyIncome"),
         MaritalStatus=data.get("MaritalStatus"),
         NoOfDependents=data.get("NoOfDependents"),
@@ -71,7 +73,8 @@ def create_user():
         "message": "User created successfully!",
         "user": {
             "UserID": new_user.UserID,
-            "Name": new_user.Name,
+            "FirstName": new_user.FirstName,
+            "LastName": new_user.LastName,
             "Email": new_user.Email,
             "AadharUploadDoc": new_user.AadharUploadDoc,
             "PANUploadDoc": new_user.PANUploadDoc,
@@ -87,7 +90,8 @@ def get_users():
     return jsonify([
         {
             "UserID": u.UserID,
-            "Name": u.Name,
+            "FirstName": u.FirstName,
+            "LastName": u.LastName,
             "Email": u.Email,
             "Phone": u.Phone,
             "DOB": u.DOB,
@@ -95,8 +99,8 @@ def get_users():
             "PAN": u.PAN,
             "AadharUploadDoc": u.AadharUploadDoc,
             "PANUploadDoc": u.PANUploadDoc,
-            "AadharVerified": u.AadharVerified,
-            "PANVerified": u.PANVerified,
+            "PhoneVerified": u.PhoneVerified,
+            "EmailVerified": u.EmailVerified,
             "MonthlyIncome": u.MonthlyIncome,
             "MaritalStatus": u.MaritalStatus,
             "NoOfDependents": u.NoOfDependents,
@@ -117,7 +121,8 @@ def get_user(user_id):
 
     return jsonify({
         "UserID": user.UserID,
-        "Name": user.Name,
+        "FirstName": user.FirstName,
+        "LastName": user.LastName,
         "Email": user.Email,
         "Phone": user.Phone,
         "DOB": user.DOB,
@@ -125,8 +130,8 @@ def get_user(user_id):
         "PAN": user.PAN,
         "AadharUploadDoc": user.AadharUploadDoc,
         "PANUploadDoc": user.PANUploadDoc,
-        "AadharVerified": user.AadharVerified,
-        "PANVerified": user.PANVerified,
+        "PhoneVerified": user.PhoneVerified,
+        "EmailVerified": user.EmailVerified,
         "MonthlyIncome": user.MonthlyIncome,
         "MaritalStatus": user.MaritalStatus,
         "NoOfDependents": user.NoOfDependents,
@@ -144,7 +149,8 @@ def update_user(user_id):
         return jsonify({"message": "User not found"}), 404
 
     data = request.json
-    user.Name = data.get("Name", user.Name)
+    user.FirstName = data.get("FirstName", user.FirstName)
+    user.LastName = data.get("LastName", user.LastName)
     user.Email = data.get("Email", user.Email)
     user.Phone = data.get("Phone", user.Phone)
     user.DOB = data.get("DOB", user.DOB)
@@ -152,8 +158,8 @@ def update_user(user_id):
     user.PAN = data.get("PAN", user.PAN)
     user.AadharUploadDoc = data.get("AadharUploadDoc", user.AadharUploadDoc)
     user.PANUploadDoc = data.get("PANUploadDoc", user.PANUploadDoc)
-    user.AadharVerified = data.get("AadharVerified", user.AadharVerified)
-    user.PANVerified = data.get("PANVerified", user.PANVerified)
+    user.PhoneVerified = data.get("PhoneVerified", user.PhoneVerified)
+    user.EmailVerified = data.get("EmailVerified", user.EmailVerified)
     user.MonthlyIncome = data.get("MonthlyIncome", user.MonthlyIncome)
     user.MaritalStatus = data.get("MaritalStatus", user.MaritalStatus)
     user.NoOfDependents = data.get("NoOfDependents", user.NoOfDependents)
