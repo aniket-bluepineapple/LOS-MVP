@@ -1,6 +1,12 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from los.models import db, User
 from flask_cors import CORS, cross_origin
+import os
+from werkzeug.utils import secure_filename
+import uuid
+
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 user_bp = Blueprint("user", __name__, url_prefix="/api/users")
 CORS(user_bp)
@@ -20,12 +26,26 @@ def options():
 @user_bp.route("/", methods=["POST"])
 @cross_origin()
 def create_user():
-    data = request.json
+    data = request.form  # Use form data instead of JSON
+    files = request.files
 
     # Validate required fields
     required_fields = ["Name", "Email", "AadharNo", "PAN", "RoleID"]
     if not all(field in data and data[field] for field in required_fields):
         return jsonify({"message": "Missing required fields"}), 400
+
+    # Handle file uploads with unique names
+    def save_file(file, prefix):
+        if file and file.filename:
+            ext = os.path.splitext(file.filename)[1]  # Get file extension
+            unique_filename = f"{prefix}_{uuid.uuid4().hex}{ext}"  # Add random string
+            file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+            file.save(file_path)
+            return file_path
+        return None
+
+    aadhar_doc_path = save_file(files.get("AadharUploadDoc"), "aadhar")
+    pan_doc_path = save_file(files.get("PANUploadDoc"), "pan")
 
     new_user = User(
         Name=data["Name"],
@@ -34,8 +54,8 @@ def create_user():
         DOB=data.get("DOB"),
         AadharNo=data["AadharNo"],
         PAN=data["PAN"],
-        AadharUploadDoc=data.get("AadharUploadDoc"),
-        PANUploadDoc=data.get("PANUploadDoc"),
+        AadharUploadDoc=aadhar_doc_path,
+        PANUploadDoc=pan_doc_path,
         AadharVerified=data.get("AadharVerified", False),
         PANVerified=data.get("PANVerified", False),
         MonthlyIncome=data.get("MonthlyIncome"),
@@ -53,19 +73,8 @@ def create_user():
             "UserID": new_user.UserID,
             "Name": new_user.Name,
             "Email": new_user.Email,
-            "Phone": new_user.Phone,
-            "DOB": new_user.DOB,
-            "AadharNo": new_user.AadharNo,
-            "PAN": new_user.PAN,
             "AadharUploadDoc": new_user.AadharUploadDoc,
             "PANUploadDoc": new_user.PANUploadDoc,
-            "AadharVerified": new_user.AadharVerified,
-            "PANVerified": new_user.PANVerified,
-            "MonthlyIncome": new_user.MonthlyIncome,
-            "MaritalStatus": new_user.MaritalStatus,
-            "NoOfDependents": new_user.NoOfDependents,
-            "RoleID": new_user.RoleID,
-            "CreatedAt": new_user.CreatedAt
         }
     }), 201
 
