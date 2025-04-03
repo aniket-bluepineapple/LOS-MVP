@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS  # ✅ Import CORS
 from los.config import Config
 from los.models import db
 from los.api.role_routes import role_bp
@@ -13,12 +14,14 @@ from los.api.credit_score_routes import credit_score_bp
 from los.api.system_notification_routes import system_notification_bp
 
 
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
     
+    # ✅ Enable CORS Globally
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
     # Register Blueprints
     app.register_blueprint(role_bp)
     app.register_blueprint(user_bp)

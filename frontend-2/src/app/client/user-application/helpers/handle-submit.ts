@@ -31,32 +31,28 @@ export const handleSubmit = async (
     //User Application
     try {
       const userResponse = await fetch(
-        "http://localhost:5000/api/loan_applications/",
+        "http://127.0.0.1:5000/api/users/",
         {
           method: "POST",
+          mode: "cors", // Ensure CORS is enabled
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            //Add userId/username
-            Name: values.firstName + " " + values.lastName, //should have 2 fields
+            Name: values.firstName + " " + values.lastName,
             DOB: values.dob,
             NoOfDependents: values.dependents,
             Email: values.email,
             Phone: values.phone,
             MaritalStatus: values.maritalStatus,
-
             AadharNo: values.aadhar,
             PAN: values.pan,
             AadharUploadDoc: values.aadharFile,
             PANUploadDoc: values.panFile,
-            // AadharVerified: values.is || false, //not required
-            // PANVerified: values.isPanVerified || false, //not required
-
+            AadharVerified: false, 
+            PANVerified:  false, 
             MonthlyIncome: values.monthlyIncome,
-            //Employment Nature and other optional fields
-
-            RoleID: "Consumer",
+            RoleID: 1,
           }),
         },
       );
@@ -80,21 +76,20 @@ export const handleSubmit = async (
     //Address Details
     try {
       const addressResponse = await fetch(
-        "http://localhost:5000//api/addresses/",
+        "http://127.0.0.1:5000/api/addresses/",
         {
           method: "POST",
+          mode: "cors", // Ensure CORS is enabled
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            UserID: "", //add this in BE
+            UserID: 1,
             Street: values.street,
             City: values.city,
-            District: values.district, // add this in BE
             State: values.state,
             Zip: values.pincode,
-            AddressType: values.addressType,
-            AddressDoc: values.addressProof, //Add this in BE
+            AddressType: values.addressType
           }),
         },
       );
