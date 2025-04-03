@@ -1,13 +1,24 @@
 from flask import Blueprint, request, jsonify
 from los.models import db, User
-
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 user_bp = Blueprint("user", __name__, url_prefix="/api/users")
 CORS(user_bp)
 
+@user_bp.route("/", methods=["OPTIONS"])
+@cross_origin()
+def options():
+    print("\n⚠️ Handling preflight request")
+    response = jsonify({"message": "CORS preflight response"})
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response
+
 # Create a new user
 @user_bp.route("/", methods=["POST"])
+@cross_origin()
 def create_user():
     data = request.json
 
@@ -61,6 +72,7 @@ def create_user():
 
 # Read all users
 @user_bp.route("/", methods=["GET"])
+@cross_origin()
 def get_users():
     users = User.query.all()
     return jsonify([
@@ -88,6 +100,7 @@ def get_users():
 
 # Read a single user
 @user_bp.route("/<int:user_id>", methods=["GET"])
+@cross_origin()
 def get_user(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -115,6 +128,7 @@ def get_user(user_id):
 
 # Update a user
 @user_bp.route("/<int:user_id>", methods=["PUT"])
+@cross_origin()
 def update_user(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -143,6 +157,7 @@ def update_user(user_id):
 
 # Delete a user
 @user_bp.route("/<int:user_id>", methods=["DELETE"])
+@cross_origin()
 def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:

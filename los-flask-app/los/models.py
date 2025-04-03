@@ -61,7 +61,7 @@ class Address(db.Model):
     City = db.Column(db.String(100))
     State = db.Column(db.String(100))
     Zip = db.Column(db.String(20))
-    AddressType = db.Column(db.Enum("Rented", "Owned"))
+    AddressType = db.Column(db.Enum("rented", "owned"))
 
     user = db.relationship("User", back_populates="addresses")
 
