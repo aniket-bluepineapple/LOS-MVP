@@ -1,11 +1,14 @@
 import { Dispatch, FormEvent, SetStateAction } from "react";
 import { validateField } from "./validate-field";
 import { FormValues } from "../types";
+import { useRouter } from "next/navigation";
+
 
 export const handleSubmit = async (
   e: FormEvent,
   values: FormValues,
   setErrors: Dispatch<SetStateAction<Partial<FormValues>>>,
+  router: ReturnType<typeof useRouter>
 ) => {
   e.preventDefault();
   let isValid = true;
@@ -27,85 +30,86 @@ export const handleSubmit = async (
       isValid = false;
     }
   });
-  if (isValid) {
-    //User Application
-    try {
-      const userResponse = await fetch(
-        "http://127.0.0.1:5000/api/users/",
-        {
-          method: "POST",
-          mode: "cors", // Ensure CORS is enabled
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Name: values.firstName + " " + values.lastName,
-            DOB: values.dob,
-            NoOfDependents: values.dependents,
-            Email: values.email,
-            Phone: values.phone,
-            MaritalStatus: values.maritalStatus,
-            AadharNo: values.aadhar,
-            PAN: values.pan,
-            AadharUploadDoc: values.aadharFile,
-            PANUploadDoc: values.panFile,
-            AadharVerified: false, 
-            PANVerified:  false, 
-            MonthlyIncome: values.monthlyIncome,
-            RoleID: 1,
-          }),
-        },
-      );
 
-      //Address fields to be posted
+  if (!isValid) return;
 
-      const data = await userResponse.json();
+  const formData = new FormData();
+  const appendIfExists = (key: string, value: any) => {
+    if (value) formData.append(key, value);
+  };
 
-      if (userResponse.ok) {
-        alert("Loan application submitted successfully!");
-        console.log("Loan Application Response:", data);
-      } else {
-        alert(`Error: ${data.message}`);
-        console.error("Loan Application Error:", data);
-      }
-    } catch (error) {
-      alert("Failed to submit loan application.");
-      console.error("API Request Error:", error);
-    }
+  formData.append("FirstName", values.firstName);
+  formData.append("LastName", values.lastName);
+  formData.append("DOB", values.dob);
+  formData.append("NoOfDependents", values.dependents);
+  formData.append("Email", values.email);
+  formData.append("OfficialEmail", values.officialEmail);
+  formData.append("PhoneVerified", values.isPhoneVerified ? "true" : "false");
+  formData.append("EmailVerified", values.isEmailVerified ? "true" : "false");
+  formData.append("Phone", values.phone);
+  formData.append("MaritalStatus", values.maritalStatus);
+  formData.append("AadharNo", values.aadhar);
+  formData.append("PAN", values.pan);
+  formData.append("MonthlyIncome", values.monthlyIncome);
+  formData.append("WorkExperience", values.experience);
+  formData.append("EmploymentNature", values.employmentNature);
+  formData.append("CompanyName", values.companyname);
+  formData.append("CompanyAddress", values.companyaddress);
+  formData.append("RoleID", "3");
+
+  // Append file uploads
+  appendIfExists("AadharUploadDoc", values.aadharFile);
+  appendIfExists("PANUploadDoc", values.panFile);
+  appendIfExists("IncomeProofDoc", values.incomeProof);
+
+  try {
+    const userResponse = await fetch("http://127.0.0.1:5000/api/users/", {
+      method: "POST",
+      mode: "cors",
+      body: formData,
+    });
+
+    const userData = await userResponse.json();
+    if (!userResponse.ok)
+      throw new Error(userData.message || "User creation failed");
+
+    const userId = userData?.user?.UserID;
+    if (!userId) throw new Error("User ID not found in response");
+
+    const addressPayload = {
+      UserID: userId,
+      Street: values.street,
+      City: values.city,
+      State: values.state,
+      Zip: values.pincode,
+      AddressType: values.addressType,
+    };
 
     //Address Details
-    try {
-      const addressResponse = await fetch(
-        "http://127.0.0.1:5000/api/addresses/",
-        {
-          method: "POST",
-          mode: "cors", // Ensure CORS is enabled
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            UserID: 1,
-            Street: values.street,
-            City: values.city,
-            State: values.state,
-            Zip: values.pincode,
-            AddressType: values.addressType
-          }),
+
+    const addressResponse = await fetch(
+      "http://127.0.0.1:5000/api/addresses/",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(addressPayload),
+      },
+    );
 
-      const data = await addressResponse.json();
+    const addressData = await addressResponse.json();
+    if (!addressResponse.ok)
+      throw new Error(addressData.message || "Address submission failed");
+    console.log("Address submitted successfully:", addressData);
 
-      if (addressResponse.ok) {
-        alert("Address submitted successfully!");
-        console.log("Address Application Response:", data);
-      } else {
-        alert(`Error: ${data.message}`);
-        console.error("Address Application Error:", data);
-      }
-    } catch (error) {
-      alert("Failed to submit address application.");
-      console.error("API Request Error:", error);
-    }
+    alert("Loan application submitted successfully!");
+
+    // Redirect to login page
+    router.push("/login");
+
+  } catch (error) {
+    console.error("API Request Error:", error);
   }
 };
