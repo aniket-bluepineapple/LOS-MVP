@@ -198,9 +198,10 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
                   handleChange(e);
                 }}
                 onBlur={handleBlur}
+                disabled={values?.isPhoneVerified}
                 className="mt-2 w-full rounded border border-[#cadcfc] p-2"
               />
-              {errors.isPhoneVerified ? (
+              {!values.isPhoneVerified && errors.isPhoneVerified ? (
                 <div className="mt-2 text-red-400">{errors.isPhoneVerified}</div>
               ) : null}
               {!values.isPhoneVerified ? (
@@ -261,9 +262,10 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
                   handleChange(e);
                 }}
                 onBlur={handleBlur}
+                disabled={values?.isEmailVerified}
                 className="mt-2 w-full rounded border border-[#cadcfc] p-2"
               />
-              {errors.isEmailVerified ? (
+              {!values.isEmailVerified && errors.isEmailVerified ? (
                 <div className="mt-2 text-red-400">{errors.isEmailVerified}</div>
               ) : null}
               {!values.isEmailVerified ? (
