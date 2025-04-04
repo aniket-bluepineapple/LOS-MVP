@@ -30,8 +30,11 @@ def create_user():
 
     # Validate required fields
     required_fields = ["FirstName", "LastName", "Email", "AadharNo", "PAN", "RoleID"]
-    if not all(field in data and data[field] for field in required_fields):
-        return jsonify({"message": "Missing required fields"}), 400
+    missing_fields = [field for field in required_fields if field not in data or not data[field]]
+
+    if missing_fields:
+        return jsonify({"message": "Missing required fields", "missing_fields": missing_fields}), 400
+
 
     # Handle file uploads with unique names
     def save_file(file, prefix):
@@ -47,6 +50,9 @@ def create_user():
     pan_doc_path = save_file(files.get("PANUploadDoc"), "pan")
     income_proof_doc_path = save_file(files.get("IncomeProofDoc"), "income_proof")
 
+    email_verified = data.get("EmailVerified") == "true"
+    phone_verified = data.get("PhoneVerified") == "true"  
+
     new_user = User(
         FirstName=data["FirstName"],
         LastName=data["LastName"],
@@ -58,12 +64,17 @@ def create_user():
         AadharUploadDoc=aadhar_doc_path,
         PANUploadDoc=pan_doc_path,
         IncomeProofDoc=income_proof_doc_path,
-        PhoneVerified=data.get("PhoneVerified", False),
-        EmailVerified=data.get("EmailVerified", False),
+        PhoneVerified=phone_verified,
+        EmailVerified=email_verified,
         MonthlyIncome=data.get("MonthlyIncome"),
         MaritalStatus=data.get("MaritalStatus"),
         NoOfDependents=data.get("NoOfDependents"),
-        RoleID=data["RoleID"]
+        RoleID=data["RoleID"],
+        CompanyName=data.get("CompanyName"),
+        CompanyAddress=data.get("CompanyAddress"),
+        OfficialEmail=data.get("OfficialEmail"),
+        WorkExperience=data.get("WorkExperience"),
+        EmploymentNature=data.get("EmploymentNature"),
     )
 
     db.session.add(new_user)

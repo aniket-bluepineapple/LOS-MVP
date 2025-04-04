@@ -2,3 +2,5 @@ venv
 .env
 migrations
 __pycache__
+uploads
+.config.py

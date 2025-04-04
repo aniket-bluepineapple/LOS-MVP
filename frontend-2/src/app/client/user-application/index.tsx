@@ -15,29 +15,16 @@ import PersonalDetails from "./personal-details";
 import KYCDetails from "./kyc-details";
 import EmploymentDetails from "./employment-details";
 import ResedentialAddress from "./resedential-address";
+import { useRouter } from "next/navigation";
 
 const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
   const [values, setValues] = useState<FormValues>(defaultFormValues);
-  // const [username, setUsername] = useState("");
   const [errors, setErrors] = useState<Partial<FormValues>>({});
   const [aadharPreview, setAadharPreview] = useState<string | null>(null);
   const [panPreview, setPanPreview] = useState<string | null>(null);
   const [addressPreview, setAddressPreview] = useState<string | null>(null);
   const [incomePreview, setIncomePreview] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Retrieve username from localStorage
-    const storedUsername = localStorage.getItem("username");
-
-    if (storedUsername) {
-      // setUsername(storedUsername);
-      //   // Fetch user data from API
-      //   fetch(`/api/user?username=${storedUsername}`)
-      //     .then((res) => res.json())
-      //     .then((data) => setUserData(data))
-      //     .catch((err) => console.error("Error fetching user data:", err));
-    }
-  }, []);
+  const router = useRouter(); // Get router instance
 
   useEffect(() => {
     if (data) {
@@ -93,7 +80,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
       <form
         className="space-y-4"
         onSubmit={(event) => {
-          handleSubmit(event, values, setErrors);
+          handleSubmit(event, values, setErrors,router);
         }}
       >
         <PersonalDetails

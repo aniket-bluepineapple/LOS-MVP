@@ -29,7 +29,7 @@ class User(db.Model):
     PANUploadDoc = db.Column(db.String(255))
     IncomeProofDoc = db.Column(db.String(255))
     MonthlyIncome = db.Column(db.Numeric(10, 2))
-    MaritalStatus = db.Column(db.Enum("Single", "Married"), nullable=True)
+    MaritalStatus = db.Column(db.String(25))
     NoOfDependents = db.Column(db.Integer)
     EmploymentNature = db.Column(db.String(255))
     WorkExperience = db.Column(db.Integer)
@@ -68,7 +68,7 @@ class Address(db.Model):
     City = db.Column(db.String(100))
     State = db.Column(db.String(100))
     Zip = db.Column(db.String(20))
-    AddressType = db.Column(db.Enum("rented", "owned"))
+    AddressType = db.Column(db.String(25))
 
     user = db.relationship("User", back_populates="addresses")
 
