@@ -1,0 +1,73 @@
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+db = SQLAlchemy()
+
+class Role(db.Model):
+    __tablename__ = "roles"
+
+    RoleID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    RoleName = db.Column(db.String(255), unique=True, nullable=False)
+    Description = db.Column(db.Text)
+
+    users = db.relationship("User", backref="role", lazy=True)
+
+class User(db.Model):
+    __tablename__ = "users"
+
+    UserID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    FirstName = db.Column(db.String(255), nullable=False)
+    LastName = db.Column(db.String(255), nullable=False)
+    Email = db.Column(db.String(255), unique=True, nullable=False)
+    Phone = db.Column(db.String(20))
+    EmailVerified = db.Column(db.Boolean, default=False)
+    PhoneVerified = db.Column(db.Boolean, default=False)
+    DOB = db.Column(db.Date)
+    AadharNo = db.Column(db.String(20), unique=True, nullable=False)
+    PAN = db.Column(db.String(10), unique=True, nullable=False)
+    AadharUploadDoc = db.Column(db.String(255))
+    PANUploadDoc = db.Column(db.String(255))
+    IncomeProofDoc = db.Column(db.String(255))
+    MonthlyIncome = db.Column(db.Numeric(10, 2))
+    MaritalStatus = db.Column(db.String(25))
+    NoOfDependents = db.Column(db.Integer)
+    EmploymentNature = db.Column(db.String(255))
+    WorkExperience = db.Column(db.Integer)
+    CompanyName = db.Column(db.String(255))
+    CompanyAddress = db.Column(db.String(255))
+    OfficialEmail = db.Column(db.String(255))
+    RoleID = db.Column(db.Integer, db.ForeignKey("roles.RoleID", ondelete="SET NULL"))
+    CreatedAt = db.Column(db.DateTime, default=datetime.utcnow)
+
+    login = db.relationship("Login", back_populates="user", uselist=False, cascade="all, delete")
+    addresses = db.relationship("Address", back_populates="user", cascade="all, delete")
+    # documents = db.relationship("Document", back_populates="user", cascade="all, delete")
+    # loan_applications = db.relationship("LoanApplication", back_populates="user", cascade="all, delete")
+    # credit_score = db.relationship("CreditScore", back_populates="user", uselist=False, cascade="all, delete")
+    # sent_notifications = db.relationship("SystemNotification", foreign_keys="SystemNotification.SenderID", back_populates="sender", cascade="all, delete")
+    # received_notifications = db.relationship("SystemNotification", foreign_keys="SystemNotification.ReceiverID", back_populates="receiver", cascade="all, delete")
+
+class Login(db.Model):
+    __tablename__ = "login"
+
+    LoginID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    UserID = db.Column(db.Integer, db.ForeignKey("users.UserID", ondelete="CASCADE"), unique=True, nullable=False)
+    Username = db.Column(db.String(255), unique=True, nullable=False)
+    PasswordHash = db.Column(db.String(255), nullable=False)
+    LastLoginAt = db.Column(db.DateTime)
+    Status = db.Column(db.Enum("Active", "Inactive"), default="Active", nullable=False)
+
+    user = db.relationship("User", back_populates="login")
+
+class Address(db.Model):
+    __tablename__ = "addresses"
+
+    AddressID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    UserID = db.Column(db.Integer, db.ForeignKey("users.UserID", ondelete="CASCADE"), nullable=False)
+    Street = db.Column(db.String(255))
+    City = db.Column(db.String(100))
+    State = db.Column(db.String(100))
+    Zip = db.Column(db.String(20))
+    AddressType = db.Column(db.String(25))
+
+    user = db.relationship("User", back_populates="addresses")
