@@ -45,7 +45,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
     } as unknown as ChangeEvent<HTMLInputElement>);
   };
 
-  // 🔹 Send Email Verification
+  // Send Email Verification
   const handleSendEmailOTP = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!values.email.trim()) {
