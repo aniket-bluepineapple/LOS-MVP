@@ -1,8 +1,21 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 from los.models import db, Product
+from flask_cors import CORS, cross_origin
 
 product_bp = Blueprint("product", __name__, url_prefix="/api/products")
+CORS(product_bp)
+
+@product_bp.route("/", methods=["OPTIONS"])
+@cross_origin()
+def options():
+    print("\n Handling preflight request")
+    response = jsonify({"message": "CORS preflight response"})
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response
 
 # Create a new product
 @product_bp.route("/", methods=["POST"])

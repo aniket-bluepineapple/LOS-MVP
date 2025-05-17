@@ -35,7 +35,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable}`}>
         <Header />
-        <main className="flex min-h-[85vh] w-full items-center justify-center">
+        <main className="flex min-h-[85vh] w-full mt-10 justify-center">
           {children}
         </main>
         <Footer />

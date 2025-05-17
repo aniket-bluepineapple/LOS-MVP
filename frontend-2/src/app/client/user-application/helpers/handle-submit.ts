@@ -2,6 +2,7 @@ import { Dispatch, FormEvent, SetStateAction } from "react";
 import { validateField } from "./validate-field";
 import { FormValues } from "../types";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/constants/layout";
 
 
 export const handleSubmit = async (
@@ -34,7 +35,7 @@ export const handleSubmit = async (
   if (!isValid) return;
 
   const formData = new FormData();
-  const appendIfExists = (key: string, value: any) => {
+  const appendIfExists = (key: string, value: File | null) => {
     if (value) formData.append(key, value);
   };
 
@@ -63,7 +64,7 @@ export const handleSubmit = async (
   appendIfExists("IncomeProofDoc", values.incomeProof);
 
   try {
-    const userResponse = await fetch("http://127.0.0.1:5000/api/users/", {
+    const userResponse = await fetch(`${BACKEND_URL}/api/users/`, {
       method: "POST",
       mode: "cors",
       body: formData,
@@ -88,7 +89,7 @@ export const handleSubmit = async (
     //Address Details
 
     const addressResponse = await fetch(
-      "http://127.0.0.1:5000/api/addresses/",
+      `${BACKEND_URL}/api/addresses/`,
       {
         method: "POST",
         mode: "cors",
