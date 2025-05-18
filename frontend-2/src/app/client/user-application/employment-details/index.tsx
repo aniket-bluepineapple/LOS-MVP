@@ -178,7 +178,10 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
             required
             className="w-full rounded border border-[#cadcfc] p-2"
           />
-          <DocumentPreview docPreview={incomePreview} previewText={`View Uploaded Income Proof`}/>
+          <DocumentPreview
+            docPreview={incomePreview}
+            previewText={`View Uploaded Income Proof`}
+          />
         </div>
       </div>
     </>

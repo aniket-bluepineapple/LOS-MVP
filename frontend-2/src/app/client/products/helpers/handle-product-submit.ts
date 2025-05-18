@@ -29,11 +29,9 @@ export const handleProductSubmit = async (
     InventoryCount: values.inventoryCount,
     Price: values.price,
   };
-  console.log("modifyRecord", modifyRecord);
-  console.log("productId", productId);
+
   try {
     if (modifyRecord && productId) {
-      console.log("Update record");
       const productResponse = await fetch(
         `${BACKEND_URL}/api/products/${productId}`,
         {

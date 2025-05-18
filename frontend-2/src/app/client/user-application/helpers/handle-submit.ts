@@ -4,12 +4,11 @@ import { FormValues } from "../types";
 import { useRouter } from "next/navigation";
 import { BACKEND_URL } from "@/constants/layout";
 
-
 export const handleSubmit = async (
   e: FormEvent,
   values: FormValues,
   setErrors: Dispatch<SetStateAction<Partial<FormValues>>>,
-  router: ReturnType<typeof useRouter>
+  router: ReturnType<typeof useRouter>,
 ) => {
   e.preventDefault();
   let isValid = true;
@@ -88,28 +87,23 @@ export const handleSubmit = async (
 
     //Address Details
 
-    const addressResponse = await fetch(
-      `${BACKEND_URL}/api/addresses/`,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(addressPayload),
+    const addressResponse = await fetch(`${BACKEND_URL}/api/addresses/`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(addressPayload),
+    });
 
     const addressData = await addressResponse.json();
     if (!addressResponse.ok)
-      throw new Error(addressData.message || "Address submission failed");
-    console.log("Address submitted successfully:", addressData);
+      throw new Error(addressData.message ?? "Address submission failed");
 
     alert("Loan application submitted successfully!");
 
     // Redirect to login page
     router.push("/login");
-
   } catch (error) {
     console.error("API Request Error:", error);
   }

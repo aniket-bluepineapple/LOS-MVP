@@ -80,7 +80,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
       <form
         className="space-y-4"
         onSubmit={(event) => {
-          handleSubmit(event, values, setErrors,router);
+          handleSubmit(event, values, setErrors, router);
         }}
       >
         <PersonalDetails

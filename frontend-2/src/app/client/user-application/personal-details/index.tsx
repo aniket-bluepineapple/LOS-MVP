@@ -202,7 +202,9 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
                 className="mt-2 w-full rounded border border-[#cadcfc] p-2"
               />
               {!values.isPhoneVerified && errors.isPhoneVerified ? (
-                <div className="mt-2 text-red-400">{errors.isPhoneVerified}</div>
+                <div className="mt-2 text-red-400">
+                  {errors.isPhoneVerified}
+                </div>
               ) : null}
               {!values.isPhoneVerified ? (
                 <button
@@ -266,7 +268,9 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
                 className="mt-2 w-full rounded border border-[#cadcfc] p-2"
               />
               {!values.isEmailVerified && errors.isEmailVerified ? (
-                <div className="mt-2 text-red-400">{errors.isEmailVerified}</div>
+                <div className="mt-2 text-red-400">
+                  {errors.isEmailVerified}
+                </div>
               ) : null}
               {!values.isEmailVerified ? (
                 <button

@@ -6,7 +6,7 @@ import Link from "next/link";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
+  //   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,8 +24,8 @@ const Login = () => {
     //   const result = await response.json();
 
     //   if (response.ok) {
-        localStorage.setItem("username", username);
-        window.location.href = "/user-application"; // Redirect to User Application Page
+    localStorage.setItem("username", username);
+    window.location.href = "/user-application"; // Redirect to User Application Page
     //   } else {
     //     setError(result.error || "Failed to sign up");
     //   }
@@ -76,7 +76,8 @@ const Login = () => {
         </button>
       </form>
       <div className="mt-4 text-center text-sm text-gray-600">
-        {`Don't have an account?`}{''}
+        {`Don't have an account?`}
+        {""}
         <Link
           href="/sign-up"
           className="font-semibold text-[#00246b] hover:underline"
