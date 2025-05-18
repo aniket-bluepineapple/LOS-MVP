@@ -169,9 +169,12 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             name="addressProof"
             onChange={handleFileChange}
             required
-            className="w-full rounded border border-[#cadcfc] p-2 cursor-pointer"
+            className="w-full cursor-pointer rounded border border-[#cadcfc] p-2"
           />
-          <DocumentPreview docPreview={addressPreview} previewText={`View Uploaded Address Proof`}/>
+          <DocumentPreview
+            docPreview={addressPreview}
+            previewText={`View Uploaded Address Proof`}
+          />
         </div>
       </div>
     </>

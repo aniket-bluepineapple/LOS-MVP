@@ -71,7 +71,10 @@ const KYCDetails: FunctionComponent<KYCDetailsProps> = ({
             required
             className="w-full rounded border border-[#cadcfc] p-2"
           />
-          <DocumentPreview docPreview={aadharPreview} previewText={`View Uploaded Aadhar PDF`}/>
+          <DocumentPreview
+            docPreview={aadharPreview}
+            previewText={`View Uploaded Aadhar PDF`}
+          />
         </div>
         <div>
           <label htmlFor="panFile" className="block font-medium">
@@ -85,7 +88,10 @@ const KYCDetails: FunctionComponent<KYCDetailsProps> = ({
             required
             className="w-full rounded border border-[#cadcfc] p-2"
           />
-          <DocumentPreview docPreview={panPreview} previewText={`View Uploaded PAN PDF`}/>
+          <DocumentPreview
+            docPreview={panPreview}
+            previewText={`View Uploaded PAN PDF`}
+          />
         </div>
       </div>
     </>

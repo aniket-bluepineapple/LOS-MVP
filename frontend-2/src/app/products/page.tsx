@@ -11,8 +11,6 @@ export default async function ProductsListPage() {
 
     const data = await res.json();
 
-    console.log("data", data);
-
     return <ProductsLandingPage data={data} />;
   } catch (error) {
     console.log("Error fetching product:", error);

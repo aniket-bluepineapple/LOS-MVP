@@ -52,36 +52,38 @@ const ProductsForm: FunctionComponent<ProductProps> = ({
   };
 
   return (
-    <div className="mx-2 my-12 w-full max-w-screen-md rounded-2xl border-2 border-[#cadcfc] p-6 shadow-lg md:mx-auto">
-      <form
-        className="space-y-4"
-        onSubmit={(event) => {
-          handleProductSubmit(
-            event,
-            values,
-            setErrors,
-            modifyRecord,
-            productId,
-          );
-        }}
-      >
-        <ProductDetails
-          values={values}
-          errors={errors}
-          handleBlur={handleBlur}
-          handleChange={handleChange}
-          modifyRecord={modifyRecord}
-        />
+    <div className="mx-2 my-12 w-full max-w-screen-md md:mx-auto">
+      <div className="w-full rounded-2xl border-2 border-[#cadcfc] p-6 shadow-lg">
+        <form
+          className="space-y-4"
+          onSubmit={(event) => {
+            handleProductSubmit(
+              event,
+              values,
+              setErrors,
+              modifyRecord,
+              productId,
+            );
+          }}
+        >
+          <ProductDetails
+            values={values}
+            errors={errors}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            modifyRecord={modifyRecord}
+          />
 
-        <div className="flex h-20 w-full items-center justify-center">
-          <button
-            type="submit"
-            className="h-10 w-full max-w-[50%] rounded-xl bg-[#00246b] p-2 text-[#cadcfc] hover:bg-[#cadcfc] hover:text-[#00246b]"
-          >
-            {modifyRecord ? "Update Product" : "Add Product"}
-          </button>
-        </div>
-      </form>
+          <div className="flex h-20 w-full items-center justify-center">
+            <button
+              type="submit"
+              className="h-10 w-full max-w-[50%] rounded-xl bg-[#00246b] p-2 text-[#cadcfc] hover:bg-[#cadcfc] hover:text-[#00246b]"
+            >
+              {modifyRecord ? "Update Product" : "Add Product"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
