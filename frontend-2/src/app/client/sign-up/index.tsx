@@ -48,7 +48,7 @@ const SignUp = () => {
         alert("Sign-up successful! Redirecting to login...");
         window.location.href = "/login"; // Redirect to login page
       } else {
-        setError(result.error || "Failed to sign up");
+        setError(result.error ?? "Failed to sign up");
       }
     } catch (error) {
       console.log(error)

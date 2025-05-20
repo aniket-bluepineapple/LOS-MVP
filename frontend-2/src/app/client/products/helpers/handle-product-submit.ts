@@ -48,7 +48,7 @@ export const handleProductSubmit = async (
       if (!productResponse.ok)
         throw new Error(productData.message ?? "Product updation failed");
 
-      alert("Product deatils updated successfully!");
+      alert("Product details updated successfully!");
     } else {
       const productResponse = await fetch(`${BACKEND_URL}/api/products/`, {
         method: "POST",
@@ -63,7 +63,7 @@ export const handleProductSubmit = async (
       if (!productResponse.ok)
         throw new Error(productData.message ?? "Product creation failed");
 
-      alert("Product deatils added successfully!");
+      alert("Product details added successfully!");
     }
   } catch (error) {
     console.error("API Request Error:", error);
