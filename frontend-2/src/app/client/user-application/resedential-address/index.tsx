@@ -155,10 +155,31 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
               Rented
             </label>
           </div>
-          {errors.addressType && (
-            <div className="text-red-400">{errors.addressType}</div>
+      {errors.addressType && (
+        <div className="text-red-400">{errors.addressType}</div>
+      )}
+      </div>
+        <div>
+          <label htmlFor="monthlyRent" className="block font-medium">
+            Monthly Rent/Home EMI
+          </label>
+          <input
+            type="number"
+            id="monthlyRent"
+            name="monthlyRent"
+            value={values.monthlyRent}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="w-full rounded border border-[#cadcfc] p-2"
+          />
+          {errors.monthlyRent && (
+            <div className="text-red-400">{errors.monthlyRent}</div>
           )}
         </div>
+      </div>
+
+      {/* Row 6 */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label htmlFor="addressProof" className="block font-medium">
             Upload Address Proof*

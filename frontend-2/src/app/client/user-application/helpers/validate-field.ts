@@ -112,6 +112,12 @@ export const validateField = (
       }
       break;
 
+    case "monthlyRent":
+      if (value && !NUMBER_REGEX.exec(value)) {
+        error = "Please enter valid amount";
+      }
+      break;
+
     case "addressType":
       if (!value) {
         error = "Please select address type";
@@ -139,8 +145,18 @@ export const validateField = (
         error = "Please select employment nature";
       }
       break;
+    case "employmentType":
+      if (!value) {
+        error = "Please select employment type";
+      }
+      break;
     case "monthlyIncome":
       if (!NUMBER_REGEX.exec(value)) {
+        error = "Please enter valid amount";
+      }
+      break;
+    case "otherMonthlyEmi":
+      if (value && !NUMBER_REGEX.exec(value)) {
         error = "Please enter valid amount";
       }
       break;

@@ -19,6 +19,8 @@ export const handleSubmit = async (
     "experience",
     "companyaddress",
     "officialEmail",
+    "monthlyRent",
+    "otherMonthlyEmi",
   ];
 
   Object.keys(values).forEach((key) => {
@@ -51,6 +53,8 @@ export const handleSubmit = async (
   formData.append("AadharNo", values.aadhar);
   formData.append("PAN", values.pan);
   formData.append("MonthlyIncome", values.monthlyIncome);
+  formData.append("EmploymentType", values.employmentType);
+  formData.append("OtherMonthlyEmi", values.otherMonthlyEmi);
   formData.append("WorkExperience", values.experience);
   formData.append("EmploymentNature", values.employmentNature);
   formData.append("CompanyName", values.companyname);
@@ -83,6 +87,7 @@ export const handleSubmit = async (
       State: values.state,
       Zip: values.pincode,
       AddressType: values.addressType,
+      MonthlyRent: values.monthlyRent,
     };
 
     //Address Details
