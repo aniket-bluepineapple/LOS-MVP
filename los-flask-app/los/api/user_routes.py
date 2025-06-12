@@ -67,8 +67,6 @@ def create_user():
         PhoneVerified=phone_verified,
         EmailVerified=email_verified,
         MonthlyIncome=data.get("MonthlyIncome"),
-        EmploymentType=data.get("EmploymentType"),
-        OtherMonthlyEmi=data.get("OtherMonthlyEmi"),
         MaritalStatus=data.get("MaritalStatus"),
         NoOfDependents=data.get("NoOfDependents"),
         RoleID=data["RoleID"],
@@ -114,10 +112,8 @@ def get_users():
             "PANUploadDoc": u.PANUploadDoc,
             "PhoneVerified": u.PhoneVerified,
             "EmailVerified": u.EmailVerified,
-        "MonthlyIncome": u.MonthlyIncome,
-        "EmploymentType": u.EmploymentType,
-        "OtherMonthlyEmi": u.OtherMonthlyEmi,
-        "MaritalStatus": u.MaritalStatus,
+            "MonthlyIncome": u.MonthlyIncome,
+            "MaritalStatus": u.MaritalStatus,
             "NoOfDependents": u.NoOfDependents,
             "RoleID": u.RoleID,
             "CreatedAt": u.CreatedAt
@@ -148,8 +144,6 @@ def get_user(user_id):
         "PhoneVerified": user.PhoneVerified,
         "EmailVerified": user.EmailVerified,
         "MonthlyIncome": user.MonthlyIncome,
-        "EmploymentType": user.EmploymentType,
-        "OtherMonthlyEmi": user.OtherMonthlyEmi,
         "MaritalStatus": user.MaritalStatus,
         "NoOfDependents": user.NoOfDependents,
         "RoleID": user.RoleID,
@@ -178,8 +172,6 @@ def update_user(user_id):
     user.PhoneVerified = data.get("PhoneVerified", user.PhoneVerified)
     user.EmailVerified = data.get("EmailVerified", user.EmailVerified)
     user.MonthlyIncome = data.get("MonthlyIncome", user.MonthlyIncome)
-    user.EmploymentType = data.get("EmploymentType", user.EmploymentType)
-    user.OtherMonthlyEmi = data.get("OtherMonthlyEmi", user.OtherMonthlyEmi)
     user.MaritalStatus = data.get("MaritalStatus", user.MaritalStatus)
     user.NoOfDependents = data.get("NoOfDependents", user.NoOfDependents)
     user.RoleID = data.get("RoleID", user.RoleID)
