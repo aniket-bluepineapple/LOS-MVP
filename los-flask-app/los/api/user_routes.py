@@ -75,9 +75,7 @@ def create_user():
         PhoneVerified=phone_verified,
         EmailVerified=email_verified,
         MonthlyIncome=data.get("MonthlyIncome"),
-        EmploymentType=data.get("EmploymentType"),
-        MonthlyEmis=data.get("MonthlyEmis"),
-        OtherMonthlyEmi=data.get("OtherMonthlyEmi"),
+        ExistingEmis=data.get("ExistingEmis"),
         MaritalStatus=data.get("MaritalStatus"),
         NoOfDependents=data.get("NoOfDependents"),
         RoleID=data["RoleID"],
@@ -102,7 +100,7 @@ def create_user():
                     "Email": new_user.Email,
                     "AadharUploadDoc": new_user.AadharUploadDoc,
                     "PANUploadDoc": new_user.PANUploadDoc,
-                    "MonthlyEmis": new_user.MonthlyEmis,
+                    "ExistingEmis": new_user.ExistingEmis,
                 },
             }
         ),
@@ -131,9 +129,7 @@ def get_users():
                 "PhoneVerified": u.PhoneVerified,
                 "EmailVerified": u.EmailVerified,
                 "MonthlyIncome": u.MonthlyIncome,
-                "EmploymentType": u.EmploymentType,
-                "MonthlyEmis": u.MonthlyEmis,
-                "OtherMonthlyEmi": u.OtherMonthlyEmi,
+                "ExistingEmis": u.ExistingEmis,
                 "MaritalStatus": u.MaritalStatus,
                 "NoOfDependents": u.NoOfDependents,
                 "RoleID": u.RoleID,
@@ -167,9 +163,7 @@ def get_user(user_id):
             "PhoneVerified": user.PhoneVerified,
             "EmailVerified": user.EmailVerified,
             "MonthlyIncome": user.MonthlyIncome,
-            "EmploymentType": user.EmploymentType,
-            "MonthlyEmis": user.MonthlyEmis,
-            "OtherMonthlyEmi": user.OtherMonthlyEmi,
+            "ExistingEmis": user.ExistingEmis,
             "MaritalStatus": user.MaritalStatus,
             "NoOfDependents": user.NoOfDependents,
             "RoleID": user.RoleID,
@@ -199,9 +193,7 @@ def update_user(user_id):
     user.PhoneVerified = data.get("PhoneVerified", user.PhoneVerified)
     user.EmailVerified = data.get("EmailVerified", user.EmailVerified)
     user.MonthlyIncome = data.get("MonthlyIncome", user.MonthlyIncome)
-    user.EmploymentType = data.get("EmploymentType", user.EmploymentType)
-    user.MonthlyEmis = data.get("MonthlyEmis", user.MonthlyEmis)
-    user.OtherMonthlyEmi = data.get("OtherMonthlyEmi", user.OtherMonthlyEmi)
+    user.ExistingEmis = data.get("ExistingEmis", user.ExistingEmis)
     user.MaritalStatus = data.get("MaritalStatus", user.MaritalStatus)
     user.NoOfDependents = data.get("NoOfDependents", user.NoOfDependents)
     user.RoleID = data.get("RoleID", user.RoleID)

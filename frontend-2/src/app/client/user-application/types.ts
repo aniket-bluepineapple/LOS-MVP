@@ -7,7 +7,7 @@ export interface FormValues {
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
   dependents: string;
-  monthlyEmis: string;
+  existingEmis: string;
   maritalStatus: string;
 
   street: string;
@@ -16,7 +16,7 @@ export interface FormValues {
   state: string;
   pincode: string;
   addressType: string;
-  monthlyRent: string;
+  monthlyHomeRent: string;
   addressProof: File | null;
 
   aadhar: string;
@@ -24,10 +24,8 @@ export interface FormValues {
   aadharFile: File | null;
   panFile: File | null;
 
-  employmentType: string;
   employmentNature: string;
   monthlyIncome: string;
-  otherMonthlyEmi: string;
   incomeProof: File | null;
   companyname: string;
   companyaddress: string;
@@ -50,7 +48,7 @@ export const defaultFormValues = {
   isEmailVerified: false,
   isPhoneVerified: false,
   dependents: "",
-  monthlyEmis: "",
+  existingEmis: "",
   maritalStatus: "",
 
   street: "",
@@ -59,7 +57,7 @@ export const defaultFormValues = {
   state: "",
   pincode: "",
   addressType: "",
-  monthlyRent: "",
+  monthlyHomeRent: "",
   addressProof: null,
 
   aadhar: "",
@@ -67,11 +65,9 @@ export const defaultFormValues = {
   aadharFile: null,
   panFile: null,
 
-  employmentType: "",
   employmentNature: "",
   companyname: "",
   monthlyIncome: "",
-  otherMonthlyEmi: "",
   incomeProof: null,
   experience: "",
   companyaddress: "",

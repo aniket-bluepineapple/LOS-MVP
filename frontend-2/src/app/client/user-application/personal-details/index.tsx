@@ -154,21 +154,21 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
           )}
         </div>
         <div>
-          <label htmlFor="monthlyEmis" className="block font-medium">
-            Monthly EMIs*
+          <label htmlFor="existingEmis" className="block font-medium">
+            Existing Monthly EMIs*
           </label>
           <input
             type="number"
-            id="monthlyEmis"
-            name="monthlyEmis"
-            value={values.monthlyEmis}
+            id="existingEmis"
+            name="existingEmis"
+            value={values.existingEmis}
             onChange={handleChange}
             onBlur={handleBlur}
             required
             className="w-full rounded border border-[#cadcfc] p-2"
           />
-          {errors.monthlyEmis && (
-            <div className="text-red-400">{errors.monthlyEmis}</div>
+          {errors.existingEmis && (
+            <div className="text-red-400">{errors.existingEmis}</div>
           )}
         </div>
       </div>

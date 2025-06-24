@@ -79,7 +79,7 @@ export const validateField = (
         error = "Please enter number of dependents";
       }
       break;
-    case "monthlyEmis":
+    case "existingEmis":
       if (!NUMBER_REGEX.exec(value)) {
         error = "Please enter valid amount";
       }
@@ -117,7 +117,7 @@ export const validateField = (
       }
       break;
 
-    case "monthlyRent":
+    case "monthlyHomeRent":
       if (value && !NUMBER_REGEX.exec(value)) {
         error = "Please enter valid amount";
       }
@@ -150,18 +150,8 @@ export const validateField = (
         error = "Please select employment nature";
       }
       break;
-    case "employmentType":
-      if (!value) {
-        error = "Please select employment type";
-      }
-      break;
     case "monthlyIncome":
       if (!NUMBER_REGEX.exec(value)) {
-        error = "Please enter valid amount";
-      }
-      break;
-    case "otherMonthlyEmi":
-      if (value && !NUMBER_REGEX.exec(value)) {
         error = "Please enter valid amount";
       }
       break;

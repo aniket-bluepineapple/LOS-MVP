@@ -25,7 +25,7 @@ def create_address():
         State=data["State"],
         Zip=data["Zip"],
         AddressType=data["AddressType"],
-        MonthlyRent=data.get("MonthlyRent")
+        MonthlyHomeRent=data.get("MonthlyHomeRent")
     )
 
     db.session.add(new_address)
@@ -41,7 +41,7 @@ def create_address():
             "State": new_address.State,
             "Zip": new_address.Zip,
             "AddressType": new_address.AddressType,
-            "MonthlyRent": new_address.MonthlyRent
+            "MonthlyHomeRent": new_address.MonthlyHomeRent
         }
     }), 201
 
@@ -59,7 +59,7 @@ def get_addresses():
             "State": a.State,
             "Zip": a.Zip,
             "AddressType": a.AddressType,
-            "MonthlyRent": a.MonthlyRent
+            "MonthlyHomeRent": a.MonthlyHomeRent
         }
         for a in addresses
     ])
@@ -80,7 +80,7 @@ def get_address(address_id):
         "State": address.State,
         "Zip": address.Zip,
         "AddressType": address.AddressType,
-        "MonthlyRent": address.MonthlyRent
+        "MonthlyHomeRent": address.MonthlyHomeRent
     })
 
 
@@ -97,7 +97,7 @@ def update_address(address_id):
     address.State = data.get("State", address.State)
     address.Zip = data.get("Zip", address.Zip)
     address.AddressType = data.get("AddressType", address.AddressType)
-    address.MonthlyRent = data.get("MonthlyRent", address.MonthlyRent)
+    address.MonthlyHomeRent = data.get("MonthlyHomeRent", address.MonthlyHomeRent)
 
     db.session.commit()
 
