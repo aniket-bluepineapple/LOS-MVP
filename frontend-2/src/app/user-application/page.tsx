@@ -1,5 +1,5 @@
-import Wizard from "../client/loan-wizard";
+import UserApplication from "../client/user-application";
 
 export default function UserApplicationPage() {
-  return <Wizard />;
+  return <UserApplication data={{}} />;
 }

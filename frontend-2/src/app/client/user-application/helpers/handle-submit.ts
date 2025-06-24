@@ -131,11 +131,18 @@ export const handleSubmit = async (
     });
     const cibilData = await cibilResponse.json();
 
-    window.localStorage.setItem("cibilScore", String(cibilData.score));
-    window.localStorage.setItem(
-      "maxLoanAllowed",
-      String(cibilData.maxLoanAllowed),
-    );
+    if (typeof cibilData.score === "number" && !isNaN(cibilData.score)) {
+      window.localStorage.setItem("cibilScore", String(cibilData.score));
+    }
+    if (
+      typeof cibilData.maxLoanAllowed === "number" &&
+      !isNaN(cibilData.maxLoanAllowed)
+    ) {
+      window.localStorage.setItem(
+        "maxLoanAllowed",
+        String(cibilData.maxLoanAllowed),
+      );
+    }
 
     await fetch(`${BACKEND_URL}/api/credit_scores/`, {
       method: "POST",
