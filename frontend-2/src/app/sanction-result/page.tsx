@@ -8,10 +8,10 @@ export default function SanctionResult() {
   const [tenure, setTenure] = useState(1);
 
   useEffect(() => {
-    const s = Number(localStorage.getItem("cibilScore") || 0);
-    const m = Number(localStorage.getItem("maxLoanAllowed") || 0);
-    setScore(s);
-    setMaxLoan(m);
+    const s = Number(localStorage.getItem("cibilScore"));
+    const m = Number(localStorage.getItem("maxLoanAllowed"));
+    setScore(isNaN(s) ? 0 : s);
+    setMaxLoan(isNaN(m) ? 0 : m);
   }, []);
 
   const emi = Math.round(maxLoan / (tenure * 12));

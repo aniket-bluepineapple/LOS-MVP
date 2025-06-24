@@ -92,8 +92,12 @@ const Wizard = () => {
         body: JSON.stringify(payload),
       });
       const json = await res.json();
-      localStorage.setItem("cibilScore", String(json.score));
-      localStorage.setItem("maxLoanAllowed", String(json.maxLoanAllowed));
+      if (typeof json.score === "number" && !isNaN(json.score)) {
+        localStorage.setItem("cibilScore", String(json.score));
+      }
+      if (typeof json.maxLoanAllowed === "number" && !isNaN(json.maxLoanAllowed)) {
+        localStorage.setItem("maxLoanAllowed", String(json.maxLoanAllowed));
+      }
       router.push("/sanction-result");
     } catch (e) {
       console.error(e);
