@@ -82,6 +82,7 @@ export const handleSubmit = async (
       UserID: userId,
       Street: values.street,
       City: values.city,
+      District: values.district,
       State: values.state,
       Zip: values.pincode,
       AddressType: values.addressType,

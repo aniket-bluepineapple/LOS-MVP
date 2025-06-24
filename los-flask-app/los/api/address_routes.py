@@ -9,7 +9,7 @@ def create_address():
     data = request.json
 
     # Validate required fields
-    required_fields = ["UserID", "Street", "City", "State", "Zip", "AddressType"]
+    required_fields = ["UserID", "Street", "City", "District", "State", "Zip", "AddressType"]
     if not all(field in data and data[field] for field in required_fields):
         return jsonify({"message": "Missing required fields"}), 400
 
@@ -22,6 +22,7 @@ def create_address():
         UserID=data["UserID"],
         Street=data["Street"],
         City=data["City"],
+        District=data["District"],
         State=data["State"],
         Zip=data["Zip"],
         AddressType=data["AddressType"],
@@ -38,6 +39,7 @@ def create_address():
             "UserID": new_address.UserID,
             "Street": new_address.Street,
             "City": new_address.City,
+            "District": new_address.District,
             "State": new_address.State,
             "Zip": new_address.Zip,
             "AddressType": new_address.AddressType,
@@ -56,6 +58,7 @@ def get_addresses():
             "UserID": a.UserID,
             "Street": a.Street,
             "City": a.City,
+            "District": a.District,
             "State": a.State,
             "Zip": a.Zip,
             "AddressType": a.AddressType,
@@ -77,6 +80,7 @@ def get_address(address_id):
         "UserID": address.UserID,
         "Street": address.Street,
         "City": address.City,
+        "District": address.District,
         "State": address.State,
         "Zip": address.Zip,
         "AddressType": address.AddressType,
@@ -94,6 +98,7 @@ def update_address(address_id):
     data = request.json
     address.Street = data.get("Street", address.Street)
     address.City = data.get("City", address.City)
+    address.District = data.get("District", address.District)
     address.State = data.get("State", address.State)
     address.Zip = data.get("Zip", address.Zip)
     address.AddressType = data.get("AddressType", address.AddressType)
