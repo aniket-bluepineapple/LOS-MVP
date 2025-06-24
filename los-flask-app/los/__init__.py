@@ -11,6 +11,7 @@ from los.api.product_routes import product_bp
 from los.api.loan_offer_routes import loan_offer_bp
 from los.api.loan_application_routes import loan_application_bp
 from los.api.credit_score_routes import credit_score_bp
+from los.api.cibil_routes import cibil_bp
 from los.api.system_notification_routes import system_notification_bp
 
 
@@ -18,7 +19,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
-    
+
     # ✅ Enable CORS Globally
     CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
@@ -32,6 +33,7 @@ def create_app():
     app.register_blueprint(loan_offer_bp)
     app.register_blueprint(loan_application_bp)
     app.register_blueprint(credit_score_bp)
+    app.register_blueprint(cibil_bp)
     app.register_blueprint(system_notification_bp)
 
     return app

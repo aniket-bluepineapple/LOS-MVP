@@ -79,6 +79,11 @@ export const validateField = (
         error = "Please enter number of dependents";
       }
       break;
+    case "monthlyEmis":
+      if (!NUMBER_REGEX.exec(value)) {
+        error = "Please enter valid amount";
+      }
+      break;
 
     case "street":
       if (!value) {
