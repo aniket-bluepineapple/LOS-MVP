@@ -120,7 +120,9 @@ export const handleSubmit = async (
       residenceType: values.addressType.toUpperCase(),
     };
 
-    const cibilResponse = await fetch(`${BACKEND_URL}/api/cibil`, {
+    // The backend route expects a trailing slash. Without it Flask may issue
+    // a redirect for POST requests, which breaks CORS in some browsers.
+    const cibilResponse = await fetch(`${BACKEND_URL}/api/cibil/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
