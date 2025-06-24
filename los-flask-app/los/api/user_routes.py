@@ -10,6 +10,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 user_bp = Blueprint("user", __name__, url_prefix="/api/users")
 CORS(user_bp)
 
+
 @user_bp.route("/", methods=["OPTIONS"])
 @cross_origin()
 def options():
@@ -21,6 +22,7 @@ def options():
     response.headers["Access-Control-Allow-Credentials"] = "true"
     return response
 
+
 # Create a new user
 @user_bp.route("/", methods=["POST"])
 @cross_origin()
@@ -30,11 +32,17 @@ def create_user():
 
     # Validate required fields
     required_fields = ["FirstName", "LastName", "Email", "AadharNo", "PAN", "RoleID"]
-    missing_fields = [field for field in required_fields if field not in data or not data[field]]
+    missing_fields = [
+        field for field in required_fields if field not in data or not data[field]
+    ]
 
     if missing_fields:
-        return jsonify({"message": "Missing required fields", "missing_fields": missing_fields}), 400
-
+        return (
+            jsonify(
+                {"message": "Missing required fields", "missing_fields": missing_fields}
+            ),
+            400,
+        )
 
     # Handle file uploads with unique names
     def save_file(file, prefix):
@@ -51,7 +59,7 @@ def create_user():
     income_proof_doc_path = save_file(files.get("IncomeProofDoc"), "income_proof")
 
     email_verified = data.get("EmailVerified") == "true"
-    phone_verified = data.get("PhoneVerified") == "true"  
+    phone_verified = data.get("PhoneVerified") == "true"
 
     new_user = User(
         FirstName=data["FirstName"],
@@ -68,6 +76,7 @@ def create_user():
         EmailVerified=email_verified,
         MonthlyIncome=data.get("MonthlyIncome"),
         EmploymentType=data.get("EmploymentType"),
+        MonthlyEmis=data.get("MonthlyEmis"),
         OtherMonthlyEmi=data.get("OtherMonthlyEmi"),
         MaritalStatus=data.get("MaritalStatus"),
         NoOfDependents=data.get("NoOfDependents"),
@@ -82,17 +91,23 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({
-        "message": "User created successfully!",
-        "user": {
-            "UserID": new_user.UserID,
-            "FirstName": new_user.FirstName,
-            "LastName": new_user.LastName,
-            "Email": new_user.Email,
-            "AadharUploadDoc": new_user.AadharUploadDoc,
-            "PANUploadDoc": new_user.PANUploadDoc,
-        }
-    }), 201
+    return (
+        jsonify(
+            {
+                "message": "User created successfully!",
+                "user": {
+                    "UserID": new_user.UserID,
+                    "FirstName": new_user.FirstName,
+                    "LastName": new_user.LastName,
+                    "Email": new_user.Email,
+                    "AadharUploadDoc": new_user.AadharUploadDoc,
+                    "PANUploadDoc": new_user.PANUploadDoc,
+                    "MonthlyEmis": new_user.MonthlyEmis,
+                },
+            }
+        ),
+        201,
+    )
 
 
 # Read all users
@@ -100,30 +115,33 @@ def create_user():
 @cross_origin()
 def get_users():
     users = User.query.all()
-    return jsonify([
-        {
-            "UserID": u.UserID,
-            "FirstName": u.FirstName,
-            "LastName": u.LastName,
-            "Email": u.Email,
-            "Phone": u.Phone,
-            "DOB": u.DOB,
-            "AadharNo": u.AadharNo,
-            "PAN": u.PAN,
-            "AadharUploadDoc": u.AadharUploadDoc,
-            "PANUploadDoc": u.PANUploadDoc,
-            "PhoneVerified": u.PhoneVerified,
-            "EmailVerified": u.EmailVerified,
-        "MonthlyIncome": u.MonthlyIncome,
-        "EmploymentType": u.EmploymentType,
-        "OtherMonthlyEmi": u.OtherMonthlyEmi,
-        "MaritalStatus": u.MaritalStatus,
-            "NoOfDependents": u.NoOfDependents,
-            "RoleID": u.RoleID,
-            "CreatedAt": u.CreatedAt
-        }
-        for u in users
-    ])
+    return jsonify(
+        [
+            {
+                "UserID": u.UserID,
+                "FirstName": u.FirstName,
+                "LastName": u.LastName,
+                "Email": u.Email,
+                "Phone": u.Phone,
+                "DOB": u.DOB,
+                "AadharNo": u.AadharNo,
+                "PAN": u.PAN,
+                "AadharUploadDoc": u.AadharUploadDoc,
+                "PANUploadDoc": u.PANUploadDoc,
+                "PhoneVerified": u.PhoneVerified,
+                "EmailVerified": u.EmailVerified,
+                "MonthlyIncome": u.MonthlyIncome,
+                "EmploymentType": u.EmploymentType,
+                "MonthlyEmis": u.MonthlyEmis,
+                "OtherMonthlyEmi": u.OtherMonthlyEmi,
+                "MaritalStatus": u.MaritalStatus,
+                "NoOfDependents": u.NoOfDependents,
+                "RoleID": u.RoleID,
+                "CreatedAt": u.CreatedAt,
+            }
+            for u in users
+        ]
+    )
 
 
 # Read a single user
@@ -134,27 +152,30 @@ def get_user(user_id):
     if not user:
         return jsonify({"message": "User not found"}), 404
 
-    return jsonify({
-        "UserID": user.UserID,
-        "FirstName": user.FirstName,
-        "LastName": user.LastName,
-        "Email": user.Email,
-        "Phone": user.Phone,
-        "DOB": user.DOB,
-        "AadharNo": user.AadharNo,
-        "PAN": user.PAN,
-        "AadharUploadDoc": user.AadharUploadDoc,
-        "PANUploadDoc": user.PANUploadDoc,
-        "PhoneVerified": user.PhoneVerified,
-        "EmailVerified": user.EmailVerified,
-        "MonthlyIncome": user.MonthlyIncome,
-        "EmploymentType": user.EmploymentType,
-        "OtherMonthlyEmi": user.OtherMonthlyEmi,
-        "MaritalStatus": user.MaritalStatus,
-        "NoOfDependents": user.NoOfDependents,
-        "RoleID": user.RoleID,
-        "CreatedAt": user.CreatedAt
-    })
+    return jsonify(
+        {
+            "UserID": user.UserID,
+            "FirstName": user.FirstName,
+            "LastName": user.LastName,
+            "Email": user.Email,
+            "Phone": user.Phone,
+            "DOB": user.DOB,
+            "AadharNo": user.AadharNo,
+            "PAN": user.PAN,
+            "AadharUploadDoc": user.AadharUploadDoc,
+            "PANUploadDoc": user.PANUploadDoc,
+            "PhoneVerified": user.PhoneVerified,
+            "EmailVerified": user.EmailVerified,
+            "MonthlyIncome": user.MonthlyIncome,
+            "EmploymentType": user.EmploymentType,
+            "MonthlyEmis": user.MonthlyEmis,
+            "OtherMonthlyEmi": user.OtherMonthlyEmi,
+            "MaritalStatus": user.MaritalStatus,
+            "NoOfDependents": user.NoOfDependents,
+            "RoleID": user.RoleID,
+            "CreatedAt": user.CreatedAt,
+        }
+    )
 
 
 # Update a user
@@ -179,6 +200,7 @@ def update_user(user_id):
     user.EmailVerified = data.get("EmailVerified", user.EmailVerified)
     user.MonthlyIncome = data.get("MonthlyIncome", user.MonthlyIncome)
     user.EmploymentType = data.get("EmploymentType", user.EmploymentType)
+    user.MonthlyEmis = data.get("MonthlyEmis", user.MonthlyEmis)
     user.OtherMonthlyEmi = data.get("OtherMonthlyEmi", user.OtherMonthlyEmi)
     user.MaritalStatus = data.get("MaritalStatus", user.MaritalStatus)
     user.NoOfDependents = data.get("NoOfDependents", user.NoOfDependents)

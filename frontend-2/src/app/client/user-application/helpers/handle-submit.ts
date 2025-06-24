@@ -54,6 +54,7 @@ export const handleSubmit = async (
   formData.append("PAN", values.pan);
   formData.append("MonthlyIncome", values.monthlyIncome);
   formData.append("EmploymentType", values.employmentType);
+  formData.append("MonthlyEmis", values.monthlyEmis);
   formData.append("OtherMonthlyEmi", values.otherMonthlyEmi);
   formData.append("WorkExperience", values.experience);
   formData.append("EmploymentNature", values.employmentNature);
@@ -105,10 +106,33 @@ export const handleSubmit = async (
     if (!addressResponse.ok)
       throw new Error(addressData.message ?? "Address submission failed");
 
-    alert("Loan application submitted successfully!");
+    const dobDate = new Date(values.dob);
+    const age = new Date().getFullYear() - dobDate.getFullYear();
 
-    // Redirect to login page
-    router.push("/login");
+    const cibilPayload = {
+      pan: values.pan,
+      salary: Number(values.monthlyIncome),
+      age,
+      existingEmis: Number(values.monthlyEmis || 0),
+      monthlyRent:
+        values.addressType === "rented" ? Number(values.monthlyRent || 0) : 0,
+      dependents: Number(values.dependents || 0),
+      residenceType: values.addressType.toUpperCase(),
+      employmentType: values.employmentType.toUpperCase(),
+    };
+
+    const cibilResponse = await fetch(`${BACKEND_URL}/api/cibil`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cibilPayload),
+    });
+    const cibilData = await cibilResponse.json();
+
+    router.push(
+      `/sanction-result?score=${cibilData.score}&maxLoan=${cibilData.maxLoanAllowed}`,
+    );
   } catch (error) {
     console.error("API Request Error:", error);
   }
