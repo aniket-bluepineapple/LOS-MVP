@@ -129,9 +129,22 @@ export const handleSubmit = async (
     });
     const cibilData = await cibilResponse.json();
 
-    router.push(
-      `/sanction-result?score=${cibilData.score}&maxLoan=${cibilData.maxLoanAllowed}`,
+    window.localStorage.setItem("cibilScore", String(cibilData.score));
+    window.localStorage.setItem(
+      "maxLoanAllowed",
+      String(cibilData.maxLoanAllowed),
     );
+
+    await fetch(`${BACKEND_URL}/api/credit_scores/`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ UserID: userId, Score: cibilData.score }),
+    });
+
+    router.push("/sanction-result");
   } catch (error) {
     console.error("API Request Error:", error);
   }
