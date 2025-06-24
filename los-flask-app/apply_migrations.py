@@ -1,6 +1,7 @@
 from pathlib import Path
-from sqlalchemy import create_engine, text
-from los.config import Config
+from sqlalchemy import text
+from los import create_app
+from los.models import db
 
 
 def apply_sql_file(engine, path: Path) -> None:
@@ -14,12 +15,20 @@ def apply_sql_file(engine, path: Path) -> None:
 
 
 def main() -> None:
-    engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
+    app = create_app()
     migrations_dir = Path(__file__).resolve().parent / "migrations"
     files = sorted(migrations_dir.glob("*.sql"))
-    for file in files:
-        print(f"Applying {file.name}...")
-        apply_sql_file(engine, file)
+
+    with app.app_context():
+        # Drop and recreate all tables
+        db.drop_all()
+        db.create_all()
+
+        engine = db.engine
+        for file in files:
+            print(f"Applying {file.name}...")
+            apply_sql_file(engine, file)
+
     print("Migrations applied successfully.")
 
 

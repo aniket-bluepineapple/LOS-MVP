@@ -126,12 +126,18 @@ def get_users():
                 "PAN": u.PAN,
                 "AadharUploadDoc": u.AadharUploadDoc,
                 "PANUploadDoc": u.PANUploadDoc,
+                "IncomeProofDoc": u.IncomeProofDoc,
                 "PhoneVerified": u.PhoneVerified,
                 "EmailVerified": u.EmailVerified,
                 "MonthlyIncome": u.MonthlyIncome,
                 "ExistingEmis": u.ExistingEmis,
                 "MaritalStatus": u.MaritalStatus,
                 "NoOfDependents": u.NoOfDependents,
+                "EmploymentNature": u.EmploymentNature,
+                "WorkExperience": u.WorkExperience,
+                "CompanyName": u.CompanyName,
+                "CompanyAddress": u.CompanyAddress,
+                "OfficialEmail": u.OfficialEmail,
                 "RoleID": u.RoleID,
                 "CreatedAt": u.CreatedAt,
             }
@@ -160,12 +166,18 @@ def get_user(user_id):
             "PAN": user.PAN,
             "AadharUploadDoc": user.AadharUploadDoc,
             "PANUploadDoc": user.PANUploadDoc,
+            "IncomeProofDoc": user.IncomeProofDoc,
             "PhoneVerified": user.PhoneVerified,
             "EmailVerified": user.EmailVerified,
             "MonthlyIncome": user.MonthlyIncome,
             "ExistingEmis": user.ExistingEmis,
             "MaritalStatus": user.MaritalStatus,
             "NoOfDependents": user.NoOfDependents,
+            "EmploymentNature": user.EmploymentNature,
+            "WorkExperience": user.WorkExperience,
+            "CompanyName": user.CompanyName,
+            "CompanyAddress": user.CompanyAddress,
+            "OfficialEmail": user.OfficialEmail,
             "RoleID": user.RoleID,
             "CreatedAt": user.CreatedAt,
         }
@@ -196,6 +208,11 @@ def update_user(user_id):
     user.ExistingEmis = data.get("ExistingEmis", user.ExistingEmis)
     user.MaritalStatus = data.get("MaritalStatus", user.MaritalStatus)
     user.NoOfDependents = data.get("NoOfDependents", user.NoOfDependents)
+    user.EmploymentNature = data.get("EmploymentNature", user.EmploymentNature)
+    user.WorkExperience = data.get("WorkExperience", user.WorkExperience)
+    user.CompanyName = data.get("CompanyName", user.CompanyName)
+    user.CompanyAddress = data.get("CompanyAddress", user.CompanyAddress)
+    user.OfficialEmail = data.get("OfficialEmail", user.OfficialEmail)
     user.RoleID = data.get("RoleID", user.RoleID)
 
     db.session.commit()
