@@ -15,10 +15,9 @@ def calculate_cibil():
         "salary",
         "age",
         "existingEmis",
-        "monthlyRent",
+        "monthlyHomeRent",
         "dependents",
         "residenceType",
-        "employmentType",
     ]
     missing = [k for k in required if k not in data]
     if missing:

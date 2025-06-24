@@ -68,48 +68,6 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
           )}
         </div>
 
-        <div>
-          <label htmlFor="employmentType" className="mb-4 block font-medium">
-            Employment Type*
-          </label>
-          <div className="flex justify-start gap-x-20">
-            <label htmlFor="employmentTypeSalaried" className="font-medium">
-              <input
-                type="radio"
-                id="employmentTypeSalaried"
-                name="employmentType"
-                value="salaried"
-                checked={values.employmentType === "salaried"}
-                onChange={(e) => {
-                  handleChange(e);
-                  handleBlur(e);
-                }}
-                className="mr-4 cursor-pointer rounded border border-[#cadcfc] p-2 uppercase"
-              />
-              Salaried
-            </label>
-
-            <label htmlFor="employmentTypeSelfEmployed" className="font-medium">
-              {" "}
-              <input
-                type="radio"
-                id="employmentTypeSelfEmployed"
-                name="employmentType"
-                value="self-employed"
-                checked={values.employmentType === "self-employed"}
-                onChange={(e) => {
-                  handleChange(e);
-                  handleBlur(e);
-                }}
-                className="mr-4 cursor-pointer rounded border border-[#cadcfc] p-2 uppercase"
-              />
-              Self Employed
-            </label>
-          </div>
-          {errors.employmentType && (
-            <div className="text-red-400">{errors.employmentType}</div>
-          )}
-        </div>
 
         <div>
           <label htmlFor="monthlyIncome" className="block font-medium">
@@ -210,23 +168,6 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
           )}
         </div>
 
-        <div>
-          <label htmlFor="otherMonthlyEmi" className="block font-medium">
-            Any Other Monthly EMI
-          </label>
-          <input
-            type="number"
-            id="otherMonthlyEmi"
-            name="otherMonthlyEmi"
-            value={values.otherMonthlyEmi}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="h-[48px] w-full rounded border border-[#cadcfc] p-2"
-          />
-          {errors.otherMonthlyEmi && (
-            <div className="text-red-400">{errors.otherMonthlyEmi}</div>
-          )}
-        </div>
         <div>
           <label htmlFor="incomeProof" className="block font-medium">
             Upload Income Proof*

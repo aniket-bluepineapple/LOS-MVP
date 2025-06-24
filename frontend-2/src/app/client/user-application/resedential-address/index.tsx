@@ -161,21 +161,21 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
         </div>
         {values.addressType === "rented" && (
           <div>
-            <label htmlFor="monthlyRent" className="block font-medium">
-              Monthly Rent
+            <label htmlFor="monthlyHomeRent" className="block font-medium">
+              Monthly Home Rent (₹)
             </label>
             <input
               type="number"
-              id="monthlyRent"
-              name="monthlyRent"
-              value={values.monthlyRent}
+              id="monthlyHomeRent"
+              name="monthlyHomeRent"
+              value={values.monthlyHomeRent}
               onChange={handleChange}
               onBlur={handleBlur}
               required
               className="w-full rounded border border-[#cadcfc] p-2"
             />
-            {errors.monthlyRent && (
-              <div className="text-red-400">{errors.monthlyRent}</div>
+            {errors.monthlyHomeRent && (
+              <div className="text-red-400">{errors.monthlyHomeRent}</div>
             )}
           </div>
         )}

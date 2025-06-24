@@ -5,13 +5,14 @@ from typing import Dict
 from ..models import db, CibilCache
 
 # Weight constants add up to 100
-SALARY_WEIGHT = 30
-AGE_WEIGHT = 10
-EMI_WEIGHT = 15
-RENT_WEIGHT = 10
-DEPENDENT_WEIGHT = 10
-RESIDENCE_WEIGHT = 10
-EMPLOYMENT_WEIGHT = 15
+WEIGHTS = {
+    "salary": 35,
+    "age": 15,
+    "emi": 15,
+    "rent": 10,
+    "dependents": 10,
+    "residence": 15,
+}
 
 
 @dataclass
@@ -30,33 +31,29 @@ def calc_cibil(input: Dict) -> CibilResult:
     salary = float(input.get("salary", 0))
     age = int(input.get("age", 0))
     existing_emis = float(input.get("existingEmis", 0))
-    monthly_rent = float(input.get("monthlyRent", 0))
+    monthly_rent = float(input.get("monthlyHomeRent", 0))
     dependents = int(input.get("dependents", 0))
     residence_type = input.get("residenceType", "OWNED")
-    employment_type = input.get("employmentType", "SALARIED")
 
     pct = 0.0
-    pct += _clamp(salary / 100000, 0, 1) * SALARY_WEIGHT
+    pct += _clamp(salary / 100000, 0, 1) * WEIGHTS["salary"]
 
     if 25 <= age <= 45:
-        pct += AGE_WEIGHT
+        pct += WEIGHTS["age"]
     elif 18 <= age < 25 or 45 < age <= 60:
-        pct += AGE_WEIGHT * 0.5
+        pct += WEIGHTS["age"] * 0.5
 
-    pct += (1 - _clamp(existing_emis / 50000, 0, 1)) * EMI_WEIGHT
+    pct += (1 - _clamp(existing_emis / 50000, 0, 1)) * WEIGHTS["emi"]
 
     if residence_type == "RENTED":
-        pct += (1 - _clamp(monthly_rent / 50000, 0, 1)) * RENT_WEIGHT
+        pct += (1 - _clamp(monthly_rent / 50000, 0, 1)) * WEIGHTS["rent"]
     else:
-        pct += RENT_WEIGHT
+        pct += WEIGHTS["rent"]
 
-    pct += (1 - _clamp(dependents / 5, 0, 1)) * DEPENDENT_WEIGHT
+    pct += (1 - _clamp(dependents / 5, 0, 1)) * WEIGHTS["dependents"]
 
-    pct += RESIDENCE_WEIGHT if residence_type == "OWNED" else RESIDENCE_WEIGHT * 0.9
+    pct += WEIGHTS["residence"] if residence_type == "OWNED" else WEIGHTS["residence"] * 0.9
 
-    pct += (
-        EMPLOYMENT_WEIGHT if employment_type == "SALARIED" else EMPLOYMENT_WEIGHT * 0.9
-    )
 
     score = int(300 + pct * 6)
     disposable = salary - existing_emis - monthly_rent

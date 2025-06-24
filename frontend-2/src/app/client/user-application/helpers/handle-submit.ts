@@ -19,8 +19,7 @@ export const handleSubmit = async (
     "experience",
     "companyaddress",
     "officialEmail",
-    "monthlyRent",
-    "otherMonthlyEmi",
+    "monthlyHomeRent",
   ];
 
   Object.keys(values).forEach((key) => {
@@ -53,9 +52,7 @@ export const handleSubmit = async (
   formData.append("AadharNo", values.aadhar);
   formData.append("PAN", values.pan);
   formData.append("MonthlyIncome", values.monthlyIncome);
-  formData.append("EmploymentType", values.employmentType);
-  formData.append("MonthlyEmis", values.monthlyEmis);
-  formData.append("OtherMonthlyEmi", values.otherMonthlyEmi);
+  formData.append("ExistingEmis", values.existingEmis);
   formData.append("WorkExperience", values.experience);
   formData.append("EmploymentNature", values.employmentNature);
   formData.append("CompanyName", values.companyname);
@@ -88,7 +85,7 @@ export const handleSubmit = async (
       State: values.state,
       Zip: values.pincode,
       AddressType: values.addressType,
-      MonthlyRent: values.monthlyRent,
+      MonthlyHomeRent: values.monthlyHomeRent,
     };
 
     //Address Details
@@ -113,12 +110,11 @@ export const handleSubmit = async (
       pan: values.pan,
       salary: Number(values.monthlyIncome),
       age,
-      existingEmis: Number(values.monthlyEmis || 0),
-      monthlyRent:
-        values.addressType === "rented" ? Number(values.monthlyRent || 0) : 0,
+      existingEmis: Number(values.existingEmis || 0),
+      monthlyHomeRent:
+        values.addressType === "rented" ? Number(values.monthlyHomeRent || 0) : 0,
       dependents: Number(values.dependents || 0),
       residenceType: values.addressType.toUpperCase(),
-      employmentType: values.employmentType.toUpperCase(),
     };
 
     const cibilResponse = await fetch(`${BACKEND_URL}/api/cibil`, {
