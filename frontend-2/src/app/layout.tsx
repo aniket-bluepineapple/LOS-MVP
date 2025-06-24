@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>
+      <body className={`${inter.variable} bg-gradient-to-br from-[#0F172A] to-[#334155] text-white min-h-screen`}>
         <Header />
         <main className="flex min-h-[85vh] w-full mt-10 justify-center">
           {children}
