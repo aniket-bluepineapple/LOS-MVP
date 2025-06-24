@@ -97,6 +97,7 @@ class Address(db.Model):
     )
     Street = db.Column(db.String(255))
     City = db.Column(db.String(100))
+    District = db.Column(db.String(100))
     State = db.Column(db.String(100))
     Zip = db.Column(db.String(20))
     AddressType = db.Column(db.String(25))
