@@ -1,7 +1,5 @@
-import UserApplication from "../client/user-application";
+import Wizard from "../client/loan-wizard";
 
-
-export default async function UserApplicationPage(){
-
-  return <UserApplication data={{}} />;
+export default function UserApplicationPage() {
+  return <Wizard />;
 }
