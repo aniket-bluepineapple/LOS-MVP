@@ -34,7 +34,7 @@ def create_address():
         State=data["State"],
         Zip=data["Zip"],
         AddressType=data["AddressType"],
-        MonthlyHomeRent=data.get("MonthlyHomeRent")
+        MonthlyHomeRent=data["MonthlyHomeRent"]
     )
 
     db.session.add(new_address)

@@ -101,7 +101,7 @@ class Address(db.Model):
     State = db.Column(db.String(100))
     Zip = db.Column(db.String(20))
     AddressType = db.Column(db.String(25))
-    MonthlyHomeRent = db.Column(db.Numeric(10, 2), default=0)
+    MonthlyHomeRent = db.Column(db.Numeric(10, 2), default=4000)
 
     user = db.relationship("User", back_populates="addresses")
 

@@ -57,12 +57,14 @@ export const handleSubmit = async (
   formData.append("EmploymentNature", values.employmentNature);
   formData.append("CompanyName", values.companyname);
   formData.append("CompanyAddress", values.companyaddress);
-  formData.append("RoleID", "3");
+  formData.append("RoleID", "2");
 
   // Append file uploads
   appendIfExists("AadharUploadDoc", values.aadharFile);
   appendIfExists("PANUploadDoc", values.panFile);
   appendIfExists("IncomeProofDoc", values.incomeProof);
+
+  
 
   try {
     const userResponse = await fetch(`${BACKEND_URL}/api/users/`, {
@@ -83,6 +85,7 @@ export const handleSubmit = async (
       Street: values.street,
       City: values.city,
       State: values.state,
+      District: values.district,
       Zip: values.pincode,
       AddressType: values.addressType,
       MonthlyHomeRent: values.monthlyHomeRent,
