@@ -1,10 +1,18 @@
 "use client";
 import { useMemo } from "react";
 
-export function useLoanCalculator(amount: number, tenureYears: 1 | 2 | 3) {
+export function useLoanCalculator(
+  amount: number,
+  tenureYears: 1 | 2 | 3,
+  cibilScore?: number
+) {
   return useMemo(() => {
-    const rateMap = { 1: 14, 2: 15, 3: 16 } as const;
-    const rate = rateMap[tenureYears];
+    const score =
+      typeof cibilScore === "number"
+        ? cibilScore
+        : Number(localStorage.getItem("cibilScore")) || 0;
+    let rate = 18 - ((score - 300) / 600) * 7;
+    rate = Math.min(18, Math.max(11, rate));
     const processingFee = Math.max(amount * 0.015, 999);
     const legalFee = 2000;
     const sanctionedMax = Number(localStorage.getItem("maxLoanAllowed")) || 0;
@@ -16,5 +24,5 @@ export function useLoanCalculator(amount: number, tenureYears: 1 | 2 | 3) {
     const netDisbursed = amount - processingFee - legalFee + cashback;
 
     return { rate, processingFee, legalFee, cashback, emi, netDisbursed };
-  }, [amount, tenureYears]);
+  }, [amount, tenureYears, cibilScore]);
 }

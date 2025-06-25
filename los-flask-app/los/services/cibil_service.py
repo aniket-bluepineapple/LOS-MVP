@@ -56,8 +56,24 @@ def calc_cibil(input: Dict) -> CibilResult:
 
 
     score = int(300 + pct * 6)
-    disposable = salary - existing_emis - monthly_rent
-    max_loan = _clamp(disposable * 15, 0, 100_000)
+
+    # Interest rate derived from score, capped between 11% and 18%
+    rate = 18 - ((score - 300) / 600) * 7
+    rate = _clamp(rate, 11, 18)
+
+    # Portion of income that can go towards EMIs
+    base_ratio = 0.4 + ((score - 300) / 600) * 0.2
+    ratio = _clamp(base_ratio - dependents * 0.02, 0.3, 0.6)
+    emi_cap = salary * ratio - existing_emis - monthly_rent
+    emi_cap = max(0, emi_cap)
+
+    months = 36
+    monthly_rate = rate / 12 / 100
+    if monthly_rate == 0:
+        max_loan = emi_cap * months
+    else:
+        factor = (1 - (1 + monthly_rate) ** -months) / monthly_rate
+        max_loan = emi_cap * factor
 
     return CibilResult(
         pan=input.get("pan"), score=score, maxLoanAllowed=float(max_loan)

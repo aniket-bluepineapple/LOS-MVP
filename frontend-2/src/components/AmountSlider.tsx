@@ -11,13 +11,26 @@ const format = (n: number) =>
   new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(n);
 
 export default function AmountSlider({ value, max, onChange }: AmountSliderProps) {
-  const handleChange = useCallback(
+  const handleRangeChange = useCallback(
     (val: string) => {
       const num = Math.min(Math.max(10000, Number(val)), max);
       onChange(num);
     },
     [max, onChange]
   );
+
+  const handleInputChange = useCallback(
+    (val: string) => {
+      const num = parseInt(val, 10);
+      if (!isNaN(num)) onChange(num);
+    },
+    [onChange]
+  );
+
+  const handleBlur = useCallback(() => {
+    const clamped = Math.min(Math.max(10000, value), max);
+    onChange(clamped);
+  }, [value, max, onChange]);
 
   return (
     <div className="space-y-2">
@@ -27,17 +40,16 @@ export default function AmountSlider({ value, max, onChange }: AmountSliderProps
         min={10000}
         max={max}
         step={1000}
-        value={value}
-        onChange={(e) => handleChange(e.target.value)}
+        value={Math.min(value, max)}
+        onChange={(e) => handleRangeChange(e.target.value)}
         className="w-full"
       />
       <input
         type="number"
-        min={10000}
-        max={max}
-        step={1000}
+        step={1}
         value={value}
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={(e) => handleInputChange(e.target.value)}
+        onBlur={handleBlur}
         className="w-full rounded border px-2 text-black"
       />
       <p className="text-sm">₹{format(value)}</p>
