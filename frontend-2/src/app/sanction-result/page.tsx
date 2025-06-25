@@ -5,12 +5,16 @@ import AmountSlider from "@/components/AmountSlider";
 import TenureSelector from "@/components/TenureSelector";
 import CostBreakdownCard from "@/components/CostBreakdownCard";
 import { useLoanCalculator } from "@/hooks/useLoanCalculator";
+import EmiDateSelector from "@/components/EmiDateSelector";
+import EmiScheduleTable from "@/components/EmiScheduleTable";
+import { useEmiSchedule } from "@/hooks/useEmiSchedule";
 
 export default function SanctionResult() {
   const [score, setScore] = useState(0);
   const [sanctionedMax, setSanctionedMax] = useState(0);
   const [amount, setAmount] = useState(0);
   const [tenure, setTenure] = useState<1 | 2 | 3>(1);
+  const [emiDay, setEmiDay] = useState(1);
 
   useEffect(() => {
     const s = Number(localStorage.getItem("cibilScore"));
@@ -21,6 +25,7 @@ export default function SanctionResult() {
   }, []);
 
   const breakdown = useLoanCalculator(amount, tenure);
+  const { schedule } = useEmiSchedule(amount, tenure, emiDay);
 
   const acceptOffer = async () => {
     try {
@@ -58,7 +63,9 @@ export default function SanctionResult() {
       </div>
       <AmountSlider value={amount} max={sanctionedMax} onChange={setAmount} />
       <TenureSelector value={tenure} onChange={setTenure} />
+      <EmiDateSelector value={emiDay} onChange={setEmiDay} />
       <CostBreakdownCard {...breakdown} />
+      <EmiScheduleTable schedule={schedule} />
       <div className="mt-4 flex justify-center gap-4">
         <motion.button
           whileHover={{ scale: 1.05 }}
