@@ -76,7 +76,7 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
   };
 
   return (
-    <div className="mx-2 my-12 w-full max-w-screen-md rounded-2xl border-2 border-[#cadcfc] p-6 shadow-lg md:mx-auto">
+    <div className="mx-2 my-12 w-full max-w-screen-md rounded-2xl bg-[#ffffff1a] p-6 shadow-lg md:mx-auto">
       <form
         className="space-y-4"
         onSubmit={(event) => {

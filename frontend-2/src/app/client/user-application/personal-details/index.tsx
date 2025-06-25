@@ -88,7 +88,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.firstName && (
             <div className="text-red-400">{errors.firstName}</div>
@@ -106,7 +106,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.lastName && (
             <div className="text-red-400">{errors.lastName}</div>
@@ -130,7 +130,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
             required
             max={MAX_DATE.toISOString().split("T")[0]}
             min={MIN_DATE.toISOString().split("T")[0]}
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.dob && <div className="text-red-400">{errors.dob}</div>}
         </div>
@@ -147,28 +147,10 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
             onBlur={handleBlur}
             required
             min={0}
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.dependents && (
             <div className="text-red-400">{errors.dependents}</div>
-          )}
-        </div>
-        <div>
-          <label htmlFor="existingEmis" className="block font-medium">
-            Existing Monthly EMIs*
-          </label>
-          <input
-            type="number"
-            id="existingEmis"
-            name="existingEmis"
-            value={values.existingEmis}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            required
-            className="w-full rounded border border-[#cadcfc] p-2"
-          />
-          {errors.existingEmis && (
-            <div className="text-red-400">{errors.existingEmis}</div>
           )}
         </div>
       </div>
@@ -187,7 +169,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.phone && <div className="text-red-400">{errors.phone}</div>}
           {values.phone ? (
@@ -217,7 +199,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
                 }}
                 onBlur={handleBlur}
                 disabled={values?.isPhoneVerified}
-                className="mt-2 w-full rounded border border-[#cadcfc] p-2"
+                className="mt-2 w-full rounded bg-[#fff3] p-2 text-white"
               />
               {!values.isPhoneVerified && errors.isPhoneVerified ? (
                 <div className="mt-2 text-red-400">
@@ -254,7 +236,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.email && <div className="text-red-400">{errors.email}</div>}
           {values.email ? (
@@ -283,7 +265,7 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
                 }}
                 onBlur={handleBlur}
                 disabled={values?.isEmailVerified}
-                className="mt-2 w-full rounded border border-[#cadcfc] p-2"
+                className="mt-2 w-full rounded bg-[#fff3] p-2 text-white"
               />
               {!values.isEmailVerified && errors.isEmailVerified ? (
                 <div className="mt-2 text-red-400">
@@ -312,6 +294,24 @@ const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({
 
       {/* Row 5 */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div>
+          <label htmlFor="existingEmis" className="block font-medium">
+            Existing Monthly EMIs*
+          </label>
+          <input
+            type="number"
+            id="existingEmis"
+            name="existingEmis"
+            value={values.existingEmis}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
+            className="w-full rounded bg-[#fff3] p-2 text-white"
+          />
+          {errors.existingEmis && (
+            <div className="text-red-400">{errors.existingEmis}</div>
+          )}
+        </div>
         <div>
           <label htmlFor="maritalStatus" className="mb-4 block font-medium">
             Marital Status*

@@ -26,3 +26,19 @@ textarea,
 select {
   color: #000;
 }
+
+/* Apply same styles for all pseudo states */
+input:hover,
+input:focus,
+input:active,
+input:focus-visible,
+input:focus-within,
+input:visited,
+input:target,
+input:enabled,
+input:checked {
+  background-color: #fff3;
+  color: white;
+  border-color: transparent;
+  outline: none;
+}
