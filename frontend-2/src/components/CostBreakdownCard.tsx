@@ -31,7 +31,7 @@ export default function CostBreakdownCard({
           </tr>
           <tr>
             <td className="py-1">Interest %</td>
-            <td className="py-1 text-right">{rate} % p.a.</td>
+            <td className="py-1 text-right">{rate.toFixed(2)} % p.a.</td>
           </tr>
           <tr>
             <td className="py-1">Processing</td>

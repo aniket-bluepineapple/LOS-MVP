@@ -13,6 +13,7 @@ export function useLoanCalculator(
         : Number(localStorage.getItem("cibilScore")) || 0;
     let rate = 18 - ((score - 300) / 600) * 7;
     rate = Math.min(18, Math.max(11, rate));
+    rate = Math.round(rate * 100) / 100;
     const processingFee = Math.max(amount * 0.015, 999);
     const legalFee = 2000;
     const sanctionedMax = Number(localStorage.getItem("maxLoanAllowed")) || 0;
