@@ -11,7 +11,7 @@ const format = (n: number) =>
 
 export default function EmiScheduleTable({ schedule }: Props) {
   return (
-    <motion.div layout className="max-h-64 overflow-auto rounded-3xl bg-white/20 p-4 shadow">
+    <motion.div layout className="max-h-64 overflow-auto rounded-3xl bg-white/20 p-4 shadow mt-4">
       <table className="w-full text-left text-sm">
         <thead>
           <tr>

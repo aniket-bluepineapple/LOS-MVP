@@ -8,6 +8,7 @@ import { useLoanCalculator } from "@/hooks/useLoanCalculator";
 import EmiDateSelector from "@/components/EmiDateSelector";
 import EmiScheduleTable from "@/components/EmiScheduleTable";
 import { useEmiSchedule } from "@/hooks/useEmiSchedule";
+import { BACKEND_URL } from "@/constants/layout";
 
 export default function SanctionResult() {
   const [score, setScore] = useState(0);
@@ -29,11 +30,23 @@ export default function SanctionResult() {
 
   const acceptOffer = async () => {
     try {
-      await fetch("/loans", {
+      const borrower = localStorage.getItem("username") || "Borrower";
+      const res = await fetch(`${BACKEND_URL}/api/agreements/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, tenureYears: tenure }),
+        body: JSON.stringify({
+          BorrowerName: borrower,
+          Amount: amount,
+          Tenure: tenure,
+          Rate: breakdown.rate,
+          Emi: breakdown.emi.toFixed(2),
+          StartDate: schedule[0]?.date,
+        }),
       });
+      const data = await res.json();
+      if (res.ok && data.DocumentURL) {
+        window.open(`${BACKEND_URL}/${data.DocumentURL}`, "_blank");
+      }
       alert("Accepted");
     } catch (e) {
       console.error(e);
@@ -44,7 +57,7 @@ export default function SanctionResult() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="mx-auto mt-10 max-w-md space-y-6 rounded-3xl bg-white/10 p-6 text-center backdrop-blur"
+      className="mx-auto mt-10 w-[95%] md:w-[60%] space-y-6 rounded-3xl bg-white/10 p-6 text-center backdrop-blur"
     >
       <h1 className="text-3xl font-bold">🎉 Your Offer Is Ready!</h1>
       <div className="flex justify-around">
