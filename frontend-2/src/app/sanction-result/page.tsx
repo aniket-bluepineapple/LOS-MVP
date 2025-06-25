@@ -14,7 +14,7 @@ export default function SanctionResult() {
   const [score, setScore] = useState(0);
   const [sanctionedMax, setSanctionedMax] = useState(0);
   const [amount, setAmount] = useState(0);
-  const [tenure, setTenure] = useState<1 | 2 | 3>(1);
+  const [tenure, setTenure] = useState<1 | 2 | 3>(3);
   const [emiDay, setEmiDay] = useState(1);
 
   useEffect(() => {
@@ -25,8 +25,26 @@ export default function SanctionResult() {
     setAmount(isNaN(m) ? 0 : m);
   }, []);
 
-  const breakdown = useLoanCalculator(amount, tenure);
-  const { schedule } = useEmiSchedule(amount, tenure, emiDay);
+  useEffect(() => {
+    setAmount((a) => Math.min(a, tenureMax));
+  }, [tenureMax]);
+
+  const breakdown = useLoanCalculator(amount, tenure, score);
+  const { schedule } = useEmiSchedule(amount, tenure, emiDay, score);
+
+  const adjustMax = (
+    base: number,
+    yrs: 1 | 2 | 3,
+    rate: number
+  ): number => {
+    const r = rate / 12 / 100;
+    const factor36 = (1 - Math.pow(1 + r, -36)) / r;
+    const emiCap = base / factor36;
+    const factorT = (1 - Math.pow(1 + r, -(yrs * 12))) / r;
+    return Math.floor(emiCap * factorT);
+  };
+
+  const tenureMax = adjustMax(sanctionedMax, tenure, breakdown.rate);
   const router = useRouter();
 
   const acceptOffer = () => {
@@ -63,7 +81,7 @@ export default function SanctionResult() {
           </div>
         </motion.div>
       </div>
-      <AmountSlider value={amount} max={sanctionedMax} onChange={setAmount} />
+      <AmountSlider value={amount} max={tenureMax} onChange={setAmount} />
       <TenureSelector value={tenure} onChange={setTenure} />
       <EmiDateSelector value={emiDay} onChange={setEmiDay} />
       <CostBreakdownCard {...breakdown} />

@@ -14,9 +14,10 @@ export interface EmiEntry {
 export function useEmiSchedule(
   amount: number,
   tenureYears: 1 | 2 | 3,
-  emiDay: number
+  emiDay: number,
+  cibilScore?: number
 ) {
-  const { rate } = useLoanCalculator(amount, tenureYears);
+  const { rate } = useLoanCalculator(amount, tenureYears, cibilScore);
   const monthlyRate = rate / 12 / 100;
   const months = tenureYears * 12;
   const emi =
@@ -47,7 +48,7 @@ export function useEmiSchedule(
       due.setMonth(due.getMonth() + 1);
     }
     return rows;
-  }, [amount, months, monthlyRate, emiDay]);
+  }, [amount, months, monthlyRate, emiDay, cibilScore]);
 
   return { emi, rate, schedule };
 }

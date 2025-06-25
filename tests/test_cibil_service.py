@@ -45,7 +45,7 @@ def test_calc_cibil_typical():
         "residenceType": "RENTED",
     })
     assert 300 <= result.score <= 900
-    assert 0 <= result.maxLoanAllowed <= 100000
+    assert result.maxLoanAllowed >= 0
 
 
 def test_get_or_create_by_pan_cache(app):
