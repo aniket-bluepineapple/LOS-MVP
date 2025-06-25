@@ -56,8 +56,19 @@ def calc_cibil(input: Dict) -> CibilResult:
 
 
     score = int(300 + pct * 6)
-    disposable = salary - existing_emis - monthly_rent
-    max_loan = _clamp(disposable * 15, 0, 100_000)
+
+    # Allowed EMI is 40-60% of salary depending on score
+    emi_fraction = 0.4 + (score - 300) / 600 * 0.2
+    emi_fraction = _clamp(emi_fraction, 0.4, 0.6)
+    allowed_total_emi = salary * emi_fraction
+    new_emi_capacity = allowed_total_emi - existing_emis
+    if new_emi_capacity <= 0:
+        max_loan = 0.0
+    else:
+        r = 16 / 12 / 100  # default rate for 3 year tenure
+        n = 36
+        max_loan = new_emi_capacity * (1 - (1 + r) ** -n) / r
+    max_loan = _clamp(max_loan, 0, 100_000)
 
     return CibilResult(
         pan=input.get("pan"), score=score, maxLoanAllowed=float(max_loan)

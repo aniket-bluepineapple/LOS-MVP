@@ -1,16 +1,20 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import AmountSlider from "@/components/AmountSlider";
 import TenureSelector from "@/components/TenureSelector";
 import CostBreakdownCard from "@/components/CostBreakdownCard";
-import { useLoanCalculator } from "@/hooks/useLoanCalculator";
+import {
+  useLoanCalculator,
+  calcEmi,
+  principalFromEmi,
+} from "@/hooks/useLoanCalculator";
 
 export default function SanctionResult() {
   const [score, setScore] = useState(0);
   const [sanctionedMax, setSanctionedMax] = useState(0);
   const [amount, setAmount] = useState(0);
-  const [tenure, setTenure] = useState<1 | 2 | 3>(1);
+  const [tenure, setTenure] = useState<1 | 2 | 3>(3);
 
   useEffect(() => {
     const s = Number(localStorage.getItem("cibilScore"));
@@ -19,6 +23,16 @@ export default function SanctionResult() {
     setSanctionedMax(isNaN(m) ? 0 : m);
     setAmount(isNaN(m) ? 0 : m);
   }, []);
+
+  const baseEmi = useMemo(() => calcEmi(sanctionedMax, 3), [sanctionedMax]);
+  const maxForTenure = useMemo(
+    () => principalFromEmi(baseEmi, tenure),
+    [baseEmi, tenure]
+  );
+
+  useEffect(() => {
+    setAmount((a) => Math.min(a, maxForTenure));
+  }, [maxForTenure]);
 
   const breakdown = useLoanCalculator(amount, tenure);
 
@@ -56,7 +70,7 @@ export default function SanctionResult() {
           </div>
         </motion.div>
       </div>
-      <AmountSlider value={amount} max={sanctionedMax} onChange={setAmount} />
+      <AmountSlider value={amount} max={maxForTenure} onChange={setAmount} />
       <TenureSelector value={tenure} onChange={setTenure} />
       <CostBreakdownCard {...breakdown} />
       <div className="mt-4 flex justify-center gap-4">
