@@ -37,7 +37,7 @@ export function useEmiSchedule(
       balance = Math.max(0, balance - principal);
       rows.push({
         month: i + 1,
-        date: due.toISOString().split("T")[0],
+        date: due.toLocaleDateString("en-CA"),
         principal,
         interest,
         total: principal + interest,

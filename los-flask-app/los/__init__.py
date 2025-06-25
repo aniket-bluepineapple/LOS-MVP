@@ -13,6 +13,7 @@ from los.api.loan_application_routes import loan_application_bp
 from los.api.credit_score_routes import credit_score_bp
 from los.api.cibil_routes import cibil_bp
 from los.api.system_notification_routes import system_notification_bp
+from los.api.agreement_routes import agreement_bp
 
 
 def create_app():
@@ -35,5 +36,6 @@ def create_app():
     app.register_blueprint(credit_score_bp)
     app.register_blueprint(cibil_bp)
     app.register_blueprint(system_notification_bp)
+    app.register_blueprint(agreement_bp)
 
     return app
