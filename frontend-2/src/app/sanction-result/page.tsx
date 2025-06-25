@@ -8,7 +8,7 @@ import { useLoanCalculator } from "@/hooks/useLoanCalculator";
 import EmiDateSelector from "@/components/EmiDateSelector";
 import EmiScheduleTable from "@/components/EmiScheduleTable";
 import { useEmiSchedule } from "@/hooks/useEmiSchedule";
-import { BACKEND_URL } from "@/constants/layout";
+import { useRouter } from "next/navigation";
 
 export default function SanctionResult() {
   const [score, setScore] = useState(0);
@@ -27,30 +27,19 @@ export default function SanctionResult() {
 
   const breakdown = useLoanCalculator(amount, tenure);
   const { schedule } = useEmiSchedule(amount, tenure, emiDay);
+  const router = useRouter();
 
-  const acceptOffer = async () => {
-    try {
-      const borrower = localStorage.getItem("username") || "Borrower";
-      const res = await fetch(`${BACKEND_URL}/api/agreements/generate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          BorrowerName: borrower,
-          Amount: amount,
-          Tenure: tenure,
-          Rate: breakdown.rate,
-          Emi: breakdown.emi.toFixed(2),
-          StartDate: schedule[0]?.date,
-        }),
-      });
-      const data = await res.json();
-      if (res.ok && data.DocumentURL) {
-        window.open(`${BACKEND_URL}/${data.DocumentURL}`, "_blank");
-      }
-      alert("Accepted");
-    } catch (e) {
-      console.error(e);
-    }
+  const acceptOffer = () => {
+    const borrower = localStorage.getItem("username") ?? "Borrower";
+    const params = new URLSearchParams({
+      BorrowerName: borrower,
+      Amount: String(amount),
+      Tenure: String(tenure),
+      Rate: String(breakdown.rate),
+      Emi: breakdown.emi.toFixed(2),
+      StartDate: schedule[0]?.date || "",
+    });
+    router.push(`/agreement?${params.toString()}`);
   };
 
   return (

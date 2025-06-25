@@ -194,6 +194,9 @@ class LoanApplication(db.Model):
     notifications = db.relationship(
         "SystemNotification", back_populates="application", cascade="all, delete"
     )
+    loan = db.relationship(
+        "Loan", back_populates="application", uselist=False, cascade="all, delete"
+    )
 
 
 class CreditScore(db.Model):
@@ -248,3 +251,31 @@ class CibilCache(db.Model):
     score = db.Column(db.Integer, nullable=False)
     max_loan = db.Column(db.Numeric(10, 2), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Loan(db.Model):
+    """Details of an accepted loan."""
+
+    __tablename__ = "loans"
+
+    LoanID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    ApplicationID = db.Column(
+        db.Integer,
+        db.ForeignKey("loan_applications.ApplicationID", ondelete="CASCADE"),
+        nullable=False,
+    )
+    PrincipalAmount = db.Column(db.Numeric(10, 2), nullable=False)
+    InterestRate = db.Column(db.Numeric(5, 2), nullable=False)
+    Tenure = db.Column(db.Integer, nullable=False)  # in months
+    Emi = db.Column(db.Numeric(10, 2), nullable=False)
+    StartDate = db.Column(db.Date, nullable=False)
+    Status = db.Column(
+        db.Enum("Active", "Closed"), default="Active", nullable=False
+    )
+    CreatedAt = db.Column(db.DateTime, default=datetime.utcnow)
+    UpdatedAt = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
+    application = db.relationship(
+        "LoanApplication", back_populates="loan", uselist=False
+    )
