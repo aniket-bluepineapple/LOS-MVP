@@ -20,13 +20,12 @@ export default function SanctionResult() {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    const s = Number(localStorage.getItem("cibilScore"));
-    const m = Number(localStorage.getItem("maxLoanAllowed"));
-    setScore(isNaN(s) ? 0 : s);
-    const rounded = isNaN(m) ? 0 : Math.round(m / 1000) * 1000;
-    setSanctionedMax(rounded);
+    const cibilScore = Number(localStorage.getItem("cibilScore"));
+    const loan = Number(localStorage.getItem("maxLoanAllowed"));
+    setScore(isNaN(cibilScore) ? 0 : cibilScore);
+    const roundedLoanAmount = isNaN(loan) ? 0 : Math.round(loan / 1000) * 1000;
+    setSanctionedMax(roundedLoanAmount);
   }, []);
-
 
   const breakdown = useLoanCalculator(amount, tenure, score);
   const { schedule } = useEmiSchedule(amount, tenure, emiDay, score);
@@ -34,17 +33,11 @@ export default function SanctionResult() {
   useEffect(() => {
     const max = adjustMax(sanctionedMax, tenure, breakdown.rate);
     setTenureMax(max);
-    setAmount((a) =>
-      initialized ? Math.min(Math.max(a, 10000), max) : max
-    );
+    setAmount((a) => (initialized ? Math.min(Math.max(a, 10000), max) : max));
     if (!initialized) setInitialized(true);
   }, [sanctionedMax, tenure, breakdown.rate, initialized]);
 
-  const adjustMax = (
-    base: number,
-    yrs: 1 | 2 | 3,
-    rate: number
-  ): number => {
+  const adjustMax = (base: number, yrs: 1 | 2 | 3, rate: number): number => {
     const r = rate / 12 / 100;
     const factor36 = (1 - Math.pow(1 + r, -36)) / r;
     const emiCap = base / factor36;
@@ -73,17 +66,17 @@ export default function SanctionResult() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="mx-auto mt-10 w-[95%] md:w-[60%] space-y-6 rounded-3xl bg-white/10 p-6 text-center backdrop-blur"
+      className="mx-auto mt-10 w-[95%] space-y-6 rounded-3xl bg-white/10 p-6 text-center backdrop-blur md:w-[60%]"
     >
       <h1 className="text-3xl font-bold">🎉 Your Offer Is Ready!</h1>
       <div className="flex justify-around">
-        <motion.div whileHover={{ rotateY: 180 }} className="w-1/2 p-4">
+        <motion.div className="w-1/2 p-4">
           <div className="rounded-3xl bg-white/20 p-4 shadow">
             <p className="text-sm">CIBIL Score</p>
             <p className="text-2xl font-bold">{score}</p>
           </div>
         </motion.div>
-        <motion.div whileHover={{ rotateY: 180 }} className="w-1/2 p-4">
+        <motion.div className="w-1/2 p-4">
           <div className="rounded-3xl bg-white/20 p-4 shadow">
             <p className="text-sm">Sanctioned Max ₹</p>
             <p className="text-2xl font-bold">{sanctionedMax}</p>

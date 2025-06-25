@@ -11,6 +11,7 @@ export function useLoanCalculator(
       typeof cibilScore === "number"
         ? cibilScore
         : Number(localStorage.getItem("cibilScore")) || 0;
+        
     let rate = 18 - ((score - 300) / 600) * 7;
     rate = Math.min(18, Math.max(11, rate));
     rate = Math.round(rate * 100) / 100;
