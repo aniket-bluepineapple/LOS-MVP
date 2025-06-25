@@ -16,6 +16,7 @@ export default function SanctionResult() {
   const [amount, setAmount] = useState(0);
   const [tenure, setTenure] = useState<1 | 2 | 3>(3);
   const [emiDay, setEmiDay] = useState(1);
+  const [tenureMax, setTenureMax] = useState(0);
 
   useEffect(() => {
     const s = Number(localStorage.getItem("cibilScore"));
@@ -25,12 +26,15 @@ export default function SanctionResult() {
     setAmount(isNaN(m) ? 0 : m);
   }, []);
 
-  useEffect(() => {
-    setAmount((a) => Math.min(a, tenureMax));
-  }, [tenureMax]);
 
   const breakdown = useLoanCalculator(amount, tenure, score);
   const { schedule } = useEmiSchedule(amount, tenure, emiDay, score);
+
+  useEffect(() => {
+    const max = adjustMax(sanctionedMax, tenure, breakdown.rate);
+    setTenureMax(max);
+    setAmount((a) => Math.min(a, max));
+  }, [sanctionedMax, tenure, breakdown.rate]);
 
   const adjustMax = (
     base: number,
@@ -44,7 +48,6 @@ export default function SanctionResult() {
     return Math.floor(emiCap * factorT);
   };
 
-  const tenureMax = adjustMax(sanctionedMax, tenure, breakdown.rate);
   const router = useRouter();
 
   const acceptOffer = () => {
