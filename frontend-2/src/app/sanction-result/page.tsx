@@ -23,8 +23,8 @@ export default function SanctionResult() {
     const s = Number(localStorage.getItem("cibilScore"));
     const m = Number(localStorage.getItem("maxLoanAllowed"));
     setScore(isNaN(s) ? 0 : s);
-    setSanctionedMax(isNaN(m) ? 0 : m);
-    setAmount(isNaN(m) ? 0 : m);
+    const rounded = isNaN(m) ? 0 : Math.round(m / 1000) * 1000;
+    setSanctionedMax(rounded);
   }, []);
 
 
@@ -93,7 +93,7 @@ export default function SanctionResult() {
       <AmountSlider value={amount} max={tenureMax} onChange={setAmount} />
       <TenureSelector value={tenure} onChange={setTenure} />
       <EmiDateSelector value={emiDay} onChange={setEmiDay} />
-      <CostBreakdownCard {...breakdown} />
+      <CostBreakdownCard {...breakdown} amount={amount} />
       <EmiScheduleTable schedule={schedule} />
       <div className="mt-4 flex justify-center gap-4">
         <motion.button

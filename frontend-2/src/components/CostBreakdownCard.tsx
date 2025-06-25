@@ -8,6 +8,7 @@ export interface Breakdown {
   legalFee: number;
   cashback: number;
   netDisbursed: number;
+  amount?: number;
 }
 
 const format = (n: number) =>
@@ -20,11 +21,18 @@ export default function CostBreakdownCard({
   legalFee,
   cashback,
   netDisbursed,
+  amount,
 }: Breakdown) {
   return (
     <motion.div layout className="rounded-3xl bg-white/20 p-4 shadow">
       <table className="w-full text-left">
         <tbody>
+          {amount !== undefined && (
+            <tr>
+              <td className="py-1">Loan Amount</td>
+              <td className="py-1 text-right">₹{format(Math.round(amount))}</td>
+            </tr>
+          )}
           <tr>
             <td className="py-1">EMI</td>
             <td className="py-1 text-right">₹{format(Math.round(emi))}</td>
