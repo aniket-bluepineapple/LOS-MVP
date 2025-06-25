@@ -17,6 +17,7 @@ export default function SanctionResult() {
   const [tenure, setTenure] = useState<1 | 2 | 3>(3);
   const [emiDay, setEmiDay] = useState(1);
   const [tenureMax, setTenureMax] = useState(0);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const s = Number(localStorage.getItem("cibilScore"));
@@ -33,8 +34,11 @@ export default function SanctionResult() {
   useEffect(() => {
     const max = adjustMax(sanctionedMax, tenure, breakdown.rate);
     setTenureMax(max);
-    setAmount((a) => Math.min(a, max));
-  }, [sanctionedMax, tenure, breakdown.rate]);
+    setAmount((a) =>
+      initialized ? Math.min(Math.max(a, 10000), max) : max
+    );
+    if (!initialized) setInitialized(true);
+  }, [sanctionedMax, tenure, breakdown.rate, initialized]);
 
   const adjustMax = (
     base: number,
@@ -45,7 +49,9 @@ export default function SanctionResult() {
     const factor36 = (1 - Math.pow(1 + r, -36)) / r;
     const emiCap = base / factor36;
     const factorT = (1 - Math.pow(1 + r, -(yrs * 12))) / r;
-    return Math.floor(emiCap * factorT);
+    const raw = emiCap * factorT;
+    const rounded = Math.round(raw / 1000) * 1000;
+    return Math.max(10000, rounded);
   };
 
   const router = useRouter();
