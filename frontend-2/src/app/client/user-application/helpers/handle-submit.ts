@@ -88,7 +88,10 @@ export const handleSubmit = async (
       District: values.district,
       Zip: values.pincode,
       AddressType: values.addressType,
-      MonthlyHomeRent: values.monthlyHomeRent,
+      MonthlyHomeRent:
+        values.addressType === "rented"
+          ? Number(values.monthlyHomeRent || 0)
+          : 0,
     };
 
     //Address Details
