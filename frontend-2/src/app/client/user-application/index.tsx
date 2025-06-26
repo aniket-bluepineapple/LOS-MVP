@@ -34,7 +34,13 @@ const UserApplication: FunctionComponent<UserApplicationProps> = ({ data }) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
+    setValues((prev) => {
+      const updated = { ...prev, [name]: value };
+      if (name === "addressType" && value === "owned") {
+        updated.monthlyHomeRent = "0";
+      }
+      return updated;
+    });
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
