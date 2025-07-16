@@ -3,9 +3,6 @@ from fpdf import FPDF
 from datetime import datetime
 import os
 from flask_cors import CORS
-from los.models import db, Loan
-
-
 from los.models import db, Document, User, LoanApplication, Loan
 
 agreement_bp = Blueprint(
@@ -16,11 +13,11 @@ agreement_bp = Blueprint(
 )
 CORS(agreement_bp)
 
+
 @agreement_bp.route("/view", methods=["GET"])
 def view_agreement():
     args = request.args
     required = [
-        "BorrowerName",
         "Amount",
         "Tenure",
         "Rate",
@@ -37,7 +34,6 @@ def view_agreement():
 def accept_agreement():
     data = request.json or {}
     required = [
-        "BorrowerName",
         "Amount",
         "Tenure",
         "Rate",
@@ -62,16 +58,14 @@ def accept_agreement():
     start_date = datetime.strptime(data["StartDate"], "%Y-%m-%d").date()
 
     pdf = FPDF()
-    borrower = data.get("BorrowerName")
 
-    # Page 1 - summary with borrower name
+    # Page 1 - summary
     pdf.add_page()
     pdf.set_font("Arial", "B", 14)
     pdf.cell(0, 10, txt="Loan Agreement", ln=1, align="C")
     pdf.ln(5)
     pdf.set_font("Arial", size=12)
     summary_lines = [
-        f"Borrower: {borrower}",
         f"Application ID: {data['ApplicationID']}",
         f"Amount: {data['Amount']}",
         f"Tenure: {data['Tenure']} years",
@@ -128,22 +122,23 @@ def accept_agreement():
     return jsonify({"message": "Agreement generated", "DocumentURL": filepath})
 
 
-
 @agreement_bp.route("/", methods=["GET"])
 def get_agreements():
     agreements = Loan.query.all()
-    return jsonify([
-        {
-            "LoanID": p.LoanID,
-            "ApplicationID": p.ApplicationID,
-            "PrincipalAmount": p.PrincipalAmount,
-            "InterestRate": p.InterestRate,
-            "Tenure": str(p.Tenure),
-            "StartDate": p.StartDate,
-            "Status": p.Status,
-            "Emi": str(p.Emi),
-            "CreatedAt": p.CreatedAt,
-            "UpdatedAt": p.UpdatedAt
-        }
-        for p in agreements
-    ])
+    return jsonify(
+        [
+            {
+                "LoanID": p.LoanID,
+                "ApplicationID": p.ApplicationID,
+                "PrincipalAmount": p.PrincipalAmount,
+                "InterestRate": p.InterestRate,
+                "Tenure": str(p.Tenure),
+                "StartDate": p.StartDate,
+                "Status": p.Status,
+                "Emi": str(p.Emi),
+                "CreatedAt": p.CreatedAt,
+                "UpdatedAt": p.UpdatedAt,
+            }
+            for p in agreements
+        ]
+    )
