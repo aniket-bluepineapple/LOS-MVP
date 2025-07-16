@@ -62,25 +62,43 @@ def accept_agreement():
     start_date = datetime.strptime(data["StartDate"], "%Y-%m-%d").date()
 
     pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
     borrower = data.get("BorrowerName")
-    lines = [
-        "Loan Agreement",
-        "",
+
+    # Page 1 - summary with borrower name
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, txt="Loan Agreement", ln=1, align="C")
+    pdf.ln(5)
+    pdf.set_font("Arial", size=12)
+    summary_lines = [
         f"Borrower: {borrower}",
+        f"Application ID: {data['ApplicationID']}",
         f"Amount: {data['Amount']}",
         f"Tenure: {data['Tenure']} years",
         f"Interest Rate: {data['Rate']}%",
         f"EMI: {data['Emi']}",
         f"Start Date: {data['StartDate']}",
-        "",
-        "The borrower agrees to repay the loan in equal monthly instalments",
-        "including interest as specified above. Late payments may incur ",
-        "additional charges. This agreement is governed by applicable laws.",
     ]
-    for line in lines:
+    for line in summary_lines:
         pdf.cell(0, 10, txt=line, ln=1)
+
+    # Page 2 - detailed terms without borrower name
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, txt="Terms and Conditions", ln=1, align="C")
+    pdf.ln(5)
+    pdf.set_font("Arial", size=12)
+    detail_lines = [
+        "The borrower agrees to repay the loan in equal monthly instalments",
+        "including interest as specified above. Late payments may incur",
+        "additional charges. This agreement is governed by applicable laws",
+        "and complies with relevant Reserve Bank of India guidelines for",
+        "consumer lending. All disputes are subject to jurisdiction of the",
+        "lender's registered office. By signing, the borrower accepts the",
+        "terms outlined herein and acknowledges the repayment schedule.",
+    ]
+    for line in detail_lines:
+        pdf.multi_cell(0, 10, txt=line)
 
     os.makedirs("agreements", exist_ok=True)
     uid = data.get("UserID") if user else "generic"
