@@ -18,6 +18,7 @@ export default function SanctionResult() {
   const [emiDay, setEmiDay] = useState(1);
   const [tenureMax, setTenureMax] = useState(0);
   const [initialized, setInitialized] = useState(false);
+  const [applicationId, setApplicationId] = useState<string | null>(null);
 
   useEffect(() => {
     const cibilScore = Number(localStorage.getItem("cibilScore"));
@@ -25,6 +26,8 @@ export default function SanctionResult() {
     setScore(isNaN(cibilScore) ? 0 : cibilScore);
     const roundedLoanAmount = isNaN(loan) ? 0 : Math.round(loan / 1000) * 1000;
     setSanctionedMax(roundedLoanAmount);
+    const id = localStorage.getItem("applicationId");
+    if (id) setApplicationId(id);
   }, []);
 
   const breakdown = useLoanCalculator(amount, tenure, score);
@@ -69,6 +72,9 @@ export default function SanctionResult() {
       className="mx-auto mt-10 w-[95%] space-y-6 rounded-3xl bg-white/10 p-6 text-center backdrop-blur md:w-[60%]"
     >
       <h1 className="text-3xl font-bold">🎉 Your Offer Is Ready!</h1>
+      {applicationId && (
+        <p className="text-lg font-semibold">Application ID: {applicationId}</p>
+      )}
       <div className="flex justify-around">
         <motion.div className="w-1/2 p-4">
           <div className="rounded-3xl bg-white/20 p-4 shadow">

@@ -156,6 +156,31 @@ export const handleSubmit = async (
       body: JSON.stringify({ UserID: userId, Score: cibilData.score }),
     });
 
+    // Create a loan application record so we can reference the Application ID
+    try {
+      const applicationRes = await fetch(`${BACKEND_URL}/api/loan_applications/`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          UserID: userId,
+          ProductID: 1,
+          LoanOfferID: 1,
+        }),
+      });
+      const appData = await applicationRes.json();
+      if (applicationRes.ok && appData.loan_application?.ApplicationID) {
+        window.localStorage.setItem(
+          "applicationId",
+          String(appData.loan_application.ApplicationID),
+        );
+      }
+    } catch (error) {
+      console.error("Error creating loan application:", error);
+    }
+
     router.push("/sanction-result");
   } catch (error) {
     console.error("API Request Error:", error);
