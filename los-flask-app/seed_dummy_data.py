@@ -3,6 +3,15 @@ from los.models import (
     db, Role, User, Login, Address, Document,
     Product, LoanOffer, LoanApplication, CreditScore, SystemNotification
 )
+import random
+
+
+def generate_unique_app_id():
+    """Generate a six digit application ID unique among existing applications."""
+    while True:
+        app_id = random.randint(100000, 999999)
+        if not LoanApplication.query.get(app_id):
+            return app_id
 
 
 def seed_dummy_data():
@@ -112,12 +121,14 @@ def seed_dummy_data():
 
         # Loan Applications
         app1 = LoanApplication(
+            ApplicationID=generate_unique_app_id(),
             UserID=user1.UserID,
             ProductID=product1.ProductID,
             LoanOfferID=offer1.OfferID,
             ApplicationStatus="Pending",
         )
         app2 = LoanApplication(
+            ApplicationID=generate_unique_app_id(),
             UserID=user2.UserID,
             ProductID=product2.ProductID,
             LoanOfferID=offer2.OfferID,
