@@ -53,9 +53,8 @@ export default function SanctionResult() {
   const router = useRouter();
 
   const acceptOffer = () => {
-    const borrower = localStorage.getItem("username") ?? "Borrower";
     const params = new URLSearchParams({
-      BorrowerName: borrower,
+      ApplicationID: applicationId || "",
       Amount: String(amount),
       Tenure: String(tenure),
       Rate: String(breakdown.rate),
