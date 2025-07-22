@@ -16,7 +16,7 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
     <>
       <ul>
         <li>
-          <h2 className="mb-10 mt-12 text-xl font-bold">Resedential Address</h2>
+          <h2 className="mb-10 mt-12 text-xl font-bold">Residential Address</h2>
         </li>
       </ul>
       {/* Row 1 */}
@@ -33,7 +33,7 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="h-[48px] w-full rounded border border-[#cadcfc] p-2"
+            className="h-[48px] w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.street && <div className="text-red-400">{errors.street}</div>}
         </div>
@@ -53,7 +53,7 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.city && <div className="text-red-400">{errors.city}</div>}
         </div>
@@ -69,7 +69,7 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.district && (
             <div className="text-red-400">{errors.district}</div>
@@ -91,7 +91,7 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.state && <div className="text-red-400">{errors.state}</div>}
         </div>
@@ -107,7 +107,7 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.pincode && (
             <div className="text-red-400">{errors.pincode}</div>
@@ -159,6 +159,30 @@ const ResedentialAddress: FunctionComponent<TResedentialAddressProps> = ({
             <div className="text-red-400">{errors.addressType}</div>
           )}
         </div>
+        {values.addressType === "rented" && (
+          <div>
+            <label htmlFor="monthlyHomeRent" className="block font-medium">
+              Monthly Home Rent (₹)
+            </label>
+            <input
+              type="number"
+              id="monthlyHomeRent"
+              name="monthlyHomeRent"
+              value={values.monthlyHomeRent}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+              className="w-full rounded bg-[#fff3] p-2 text-white"
+            />
+            {errors.monthlyHomeRent && (
+              <div className="text-red-400">{errors.monthlyHomeRent}</div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Row 6 */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label htmlFor="addressProof" className="block font-medium">
             Upload Address Proof*

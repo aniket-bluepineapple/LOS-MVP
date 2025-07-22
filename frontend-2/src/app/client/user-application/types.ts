@@ -7,6 +7,7 @@ export interface FormValues {
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
   dependents: string;
+  existingEmis: string;
   maritalStatus: string;
 
   street: string;
@@ -15,6 +16,7 @@ export interface FormValues {
   state: string;
   pincode: string;
   addressType: string;
+  monthlyHomeRent: string;
   addressProof: File | null;
 
   aadhar: string;
@@ -46,6 +48,7 @@ export const defaultFormValues = {
   isEmailVerified: false,
   isPhoneVerified: false,
   dependents: "",
+  existingEmis: "",
   maritalStatus: "",
 
   street: "",
@@ -54,6 +57,7 @@ export const defaultFormValues = {
   state: "",
   pincode: "",
   addressType: "",
+  monthlyHomeRent: "",
   addressProof: null,
 
   aadhar: "",

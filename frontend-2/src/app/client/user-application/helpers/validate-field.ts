@@ -79,6 +79,11 @@ export const validateField = (
         error = "Please enter number of dependents";
       }
       break;
+    case "existingEmis":
+      if (!NUMBER_REGEX.exec(value)) {
+        error = "Please enter valid amount";
+      }
+      break;
 
     case "street":
       if (!value) {
@@ -109,6 +114,12 @@ export const validateField = (
         error = "Please enter pincode";
       } else if (!PINCODE_REGEX.exec(value)) {
         error = "Please enter a valid pincode";
+      }
+      break;
+
+    case "monthlyHomeRent":
+      if (value && !NUMBER_REGEX.exec(value)) {
+        error = "Please enter valid amount";
       }
       break;
 

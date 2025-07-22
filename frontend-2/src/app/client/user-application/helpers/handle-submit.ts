@@ -19,6 +19,8 @@ export const handleSubmit = async (
     "experience",
     "companyaddress",
     "officialEmail",
+    "monthlyHomeRent",
+
   ];
 
   Object.keys(values).forEach((key) => {
@@ -51,16 +53,19 @@ export const handleSubmit = async (
   formData.append("AadharNo", values.aadhar);
   formData.append("PAN", values.pan);
   formData.append("MonthlyIncome", values.monthlyIncome);
+  formData.append("ExistingEmis", values.existingEmis);
   formData.append("WorkExperience", values.experience);
   formData.append("EmploymentNature", values.employmentNature);
   formData.append("CompanyName", values.companyname);
   formData.append("CompanyAddress", values.companyaddress);
-  formData.append("RoleID", "3");
+  formData.append("RoleID", "2");
 
   // Append file uploads
   appendIfExists("AadharUploadDoc", values.aadharFile);
   appendIfExists("PANUploadDoc", values.panFile);
   appendIfExists("IncomeProofDoc", values.incomeProof);
+
+  
 
   try {
     const userResponse = await fetch(`${BACKEND_URL}/api/users/`, {
@@ -81,8 +86,13 @@ export const handleSubmit = async (
       Street: values.street,
       City: values.city,
       State: values.state,
+      District: values.district,
       Zip: values.pincode,
       AddressType: values.addressType,
+      MonthlyHomeRent:
+        values.addressType === "rented"
+          ? Number(values.monthlyHomeRent || 0)
+          : 0,
     };
 
     //Address Details
@@ -100,10 +110,79 @@ export const handleSubmit = async (
     if (!addressResponse.ok)
       throw new Error(addressData.message ?? "Address submission failed");
 
-    alert("Loan application submitted successfully!");
+    const dobDate = new Date(values.dob);
+    const age = new Date().getFullYear() - dobDate.getFullYear();
 
-    // Redirect to login page
-    router.push("/login");
+    const cibilPayload = {
+      pan: values.pan,
+      salary: Number(values.monthlyIncome),
+      age,
+      existingEmis: Number(values.existingEmis || 0),
+      monthlyHomeRent:
+        values.addressType === "rented" ? Number(values.monthlyHomeRent || 0) : 0,
+      dependents: Number(values.dependents || 0),
+      residenceType: values.addressType.toUpperCase(),
+    };
+
+    // The backend route expects a trailing slash. Without it Flask may issue
+    // a redirect for POST requests, which breaks CORS in some browsers.
+    const cibilResponse = await fetch(`${BACKEND_URL}/api/cibil/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cibilPayload),
+    });
+    const cibilData = await cibilResponse.json();
+
+    if (typeof cibilData.score === "number" && !isNaN(cibilData.score)) {
+      window.localStorage.setItem("cibilScore", String(cibilData.score));
+    }
+    if (
+      typeof cibilData.maxLoanAllowed === "number" &&
+      !isNaN(cibilData.maxLoanAllowed)
+    ) {
+      window.localStorage.setItem(
+        "maxLoanAllowed",
+        String(cibilData.maxLoanAllowed),
+      );
+    }
+
+    await fetch(`${BACKEND_URL}/api/credit_scores/`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ UserID: userId, Score: cibilData.score }),
+    });
+
+    // Create a loan application record so we can reference the Application ID
+    try {
+      const applicationRes = await fetch(`${BACKEND_URL}/api/loan_applications/`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          UserID: userId,
+          ProductID: 1,
+          LoanOfferID: 1,
+        }),
+      });
+      const appData = await applicationRes.json();
+      if (applicationRes.ok && appData.loan_application?.ApplicationID) {
+        window.localStorage.setItem(
+          "applicationId",
+          String(appData.loan_application.ApplicationID),
+        );
+      }
+    } catch (error) {
+      console.error("Error creating loan application:", error);
+    }
+
+    router.push("/sanction-result");
   } catch (error) {
     console.error("API Request Error:", error);
   }

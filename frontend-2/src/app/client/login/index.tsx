@@ -6,32 +6,12 @@ import Link from "next/link";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  //   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // try {
-    //   // Call backend API to create a new user
-    //   const response = await fetch("/api/signup", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ Username: username, Password: password }),
-    //   });
-
-    //   const result = await response.json();
-
-    //   if (response.ok) {
     localStorage.setItem("username", username);
     window.location.href = "/user-application"; // Redirect to User Application Page
-    //   } else {
-    //     setError(result.error || "Failed to sign up");
-    //   }
-    // } catch (err) {
-    //   setError("An error occurred");
-    // }
   };
 
   return (
@@ -67,7 +47,6 @@ const Login = () => {
           />
         </div>
 
-        {/* {error && <div className="text-sm text-red-500">{error}</div>} */}
         <button
           type="submit"
           className="h-10 w-full rounded-xl bg-[#00246b] p-2 text-[#cadcfc] hover:bg-[#cadcfc] hover:text-[#00246b]"

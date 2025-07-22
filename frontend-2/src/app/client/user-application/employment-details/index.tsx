@@ -80,7 +80,7 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.monthlyIncome && (
             <div className="text-red-400">{errors.monthlyIncome}</div>
@@ -101,7 +101,7 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
             value={values.companyname}
             onChange={handleChange}
             onBlur={handleBlur}
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.companyname && (
             <div className="text-red-400">{errors.companyname}</div>
@@ -119,7 +119,7 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             min={0}
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.experience && (
             <div className="text-red-400">{errors.experience}</div>
@@ -140,7 +140,7 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
             value={values.companyaddress}
             onChange={handleChange}
             onBlur={handleBlur}
-            className="h-[48px] w-full rounded border border-[#cadcfc] p-2"
+            className="h-[48px] w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.companyaddress && (
             <div className="text-red-400">{errors.companyaddress}</div>
@@ -160,12 +160,13 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
             value={values.officialEmail}
             onChange={handleChange}
             onBlur={handleBlur}
-            className="h-[48px] w-full rounded border border-[#cadcfc] p-2"
+            className="h-[48px] w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.officialEmail && (
             <div className="text-red-400">{errors.officialEmail}</div>
           )}
         </div>
+
         <div>
           <label htmlFor="incomeProof" className="block font-medium">
             Upload Income Proof*

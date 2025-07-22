@@ -1,7 +1,5 @@
 import UserApplication from "../client/user-application";
 
-
-export default async function UserApplicationPage(){
-
+export default function UserApplicationPage() {
   return <UserApplication data={{}} />;
 }

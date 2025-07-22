@@ -35,7 +35,7 @@ const KYCDetails: FunctionComponent<KYCDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2"
+            className="w-full rounded bg-[#fff3] p-2 text-white"
           />
           {errors.aadhar && <div className="text-red-400">{errors.aadhar}</div>}
         </div>
@@ -51,7 +51,7 @@ const KYCDetails: FunctionComponent<KYCDetailsProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            className="w-full rounded border border-[#cadcfc] p-2 uppercase"
+            className="w-full rounded bg-[#fff3] p-2 text-white uppercase"
           />
           {errors.pan && <div className="text-red-400">{errors.pan}</div>}
         </div>

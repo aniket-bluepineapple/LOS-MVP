@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
+import random
 from los.models import db, LoanApplication, User, Product, LoanOffer
 
 from flask_cors import CORS
@@ -7,6 +8,14 @@ from flask_cors import CORS
 loan_application_bp = Blueprint("loan_application", __name__, url_prefix="/api/loan_applications")
 
 CORS(loan_application_bp)
+
+
+def generate_unique_app_id():
+    """Generate a six digit application ID that does not already exist."""
+    while True:
+        app_id = random.randint(100000, 999999)
+        if not LoanApplication.query.get(app_id):
+            return app_id
 
 # Create a new loan application
 @loan_application_bp.route("/", methods=["POST"])
@@ -31,12 +40,13 @@ def create_loan_application():
         return jsonify({"message": "Loan Offer not found"}), 404
 
     new_loan_application = LoanApplication(
+        ApplicationID=generate_unique_app_id(),
         UserID=data["UserID"],
         ProductID=data["ProductID"],
         LoanOfferID=data["LoanOfferID"],
         ApplicationStatus=data.get("ApplicationStatus", "Pending"),
         CreatedAt=datetime.utcnow(),
-        UpdatedAt=datetime.utcnow()
+        UpdatedAt=datetime.utcnow(),
     )
 
     db.session.add(new_loan_application)
