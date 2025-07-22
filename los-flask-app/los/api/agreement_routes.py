@@ -59,38 +59,66 @@ def accept_agreement():
 
     start_date = datetime.strptime(data["StartDate"], "%Y-%m-%d").date()
 
+
+    # Create PDF
     pdf = FPDF()
-
-    # Page 1 - summary
     pdf.add_page()
-    pdf.set_font("Arial", size=12)
 
-    lines = [
-        "Loan Agreement",
-        "",
-        f"Application ID: {data['ApplicationID']}",
-        f"Amount: {data['Amount']}",
-        f"Tenure: {data['Tenure']} years",
-        f"Interest Rate: {data['Rate']}%",
-        f"EMI: {data['Emi']}",
-        f"Start Date: {data['StartDate']}",
-        "",
-        "Terms and Conditions",
-        "",
-        "The borrower agrees to repay the loan in equal monthly instalments",
-        "including interest as specified above. Late payments may incur",
-        "additional charges. This agreement is governed by applicable laws",
-        "and complies with relevant Reserve Bank of India guidelines for",
-        "consumer lending. All disputes are subject to jurisdiction of the",
-        "lender's registered office. By signing, the borrower accepts the",
-        "terms outlined herein and acknowledges the repayment schedule.",
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(0, 10, "Loan Agreement", ln=1, align="C")
+
+    pdf.ln(10)
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "Loan Summary", ln=1)
+    pdf.set_font("Arial", "", 12)
+
+    summary_fields = [
+        ("Application ID", data["ApplicationID"]),
+        ("Amount", f"Rs. {data['Amount']}"),
+        ("Tenure", f"{data['Tenure']} years"),
+        ("Interest Rate", f"{data['Rate']}%"),
+        ("EMI", f"Rs. {data['Emi']}"),
+        ("Start Date", data["StartDate"]),
     ]
-    for line in lines:
-        pdf.cell(0, 10, txt=line, ln=1)
+
+    col_widths = [60, 120]
+    for label, value in summary_fields:
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(col_widths[0], 10, str(label), border=1)
+        pdf.set_font("Arial", "", 12)
+        pdf.cell(col_widths[1], 10, str(value), border=1, ln=1)
+
+    pdf.ln(10)
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "Terms and Conditions", ln=1)
+    pdf.set_font("Arial", "", 12)
+
+    line_height = 8
+    cell_width = 190
+
+    terms = [
+        "1. The borrower agrees to repay the loan in equal monthly instalments (EMI).",
+        "2. EMIs include interest as per the agreed rate.",
+        "3. Late payments may incur additional charges.",
+        "4. This agreement is governed by applicable laws and RBI guidelines.",
+        "5. All disputes are subject to the jurisdiction of the lender's registered office.",
+        "6. By signing, the borrower accepts the terms and repayment schedule.",
+    ]
+
+    for term in terms:
+        pdf.multi_cell(cell_width, line_height, term)
+        pdf.ln(2)
+
+    pdf.ln(20)
+
+    pdf.cell(0, 10, "Borrower Signature: _______________________", ln=1)
+    pdf.cell(0, 10, f"Date: {datetime.now().strftime('%Y-%m-%d')}", ln=1)
 
 
     os.makedirs("agreements", exist_ok=True)
-    uid = data.get("UserID") if user else "generic"
+    uid = data.get("ApplicationID") if user else "generic"
     filename = f"agreement_{uid}_{int(datetime.utcnow().timestamp())}.pdf"
     filepath = os.path.join("agreements", filename)
     pdf.output(filepath)

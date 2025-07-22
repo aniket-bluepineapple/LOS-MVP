@@ -31,7 +31,6 @@ export default function AgreementPage() {
       const data = await res.json();
       if (res.ok && data.DocumentURL) {
         window.open(`${BACKEND_URL}/${data.DocumentURL}`, "_blank");
-        router.push("/sanction-result");
       }
     } catch (e) {
       console.error(e);
