@@ -68,7 +68,6 @@ const EmploymentDetails: FunctionComponent<EmploymentDetailsProps> = ({
           )}
         </div>
 
-
         <div>
           <label htmlFor="monthlyIncome" className="block font-medium">
             Monthly Income*

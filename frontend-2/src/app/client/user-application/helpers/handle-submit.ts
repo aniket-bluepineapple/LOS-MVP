@@ -20,6 +20,7 @@ export const handleSubmit = async (
     "companyaddress",
     "officialEmail",
     "monthlyHomeRent",
+
   ];
 
   Object.keys(values).forEach((key) => {

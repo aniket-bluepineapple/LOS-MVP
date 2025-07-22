@@ -103,6 +103,7 @@ class Address(db.Model):
     AddressType = db.Column(db.String(25))
     MonthlyHomeRent = db.Column(db.Numeric(10, 2), default=4000)
 
+
     user = db.relationship("User", back_populates="addresses")
 
 
