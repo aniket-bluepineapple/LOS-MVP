@@ -18,6 +18,7 @@ CORS(agreement_bp)
 def view_agreement():
     args = request.args
     required = [
+        "BorrowerName",
         "Amount",
         "Tenure",
         "Rate",
@@ -34,6 +35,7 @@ def view_agreement():
 def accept_agreement():
     data = request.json or {}
     required = [
+        "BorrowerName",
         "Amount",
         "Tenure",
         "Rate",
@@ -61,28 +63,20 @@ def accept_agreement():
 
     # Page 1 - summary
     pdf.add_page()
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, txt="Loan Agreement", ln=1, align="C")
-    pdf.ln(5)
     pdf.set_font("Arial", size=12)
-    summary_lines = [
+
+    lines = [
+        "Loan Agreement",
+        "",
         f"Application ID: {data['ApplicationID']}",
         f"Amount: {data['Amount']}",
         f"Tenure: {data['Tenure']} years",
         f"Interest Rate: {data['Rate']}%",
         f"EMI: {data['Emi']}",
         f"Start Date: {data['StartDate']}",
-    ]
-    for line in summary_lines:
-        pdf.cell(0, 10, txt=line, ln=1)
-
-    # Page 2 - detailed terms without borrower name
-    pdf.add_page()
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, txt="Terms and Conditions", ln=1, align="C")
-    pdf.ln(5)
-    pdf.set_font("Arial", size=12)
-    detail_lines = [
+        "",
+        "Terms and Conditions",
+        "",
         "The borrower agrees to repay the loan in equal monthly instalments",
         "including interest as specified above. Late payments may incur",
         "additional charges. This agreement is governed by applicable laws",
@@ -91,8 +85,9 @@ def accept_agreement():
         "lender's registered office. By signing, the borrower accepts the",
         "terms outlined herein and acknowledges the repayment schedule.",
     ]
-    for line in detail_lines:
-        pdf.multi_cell(0, 10, txt=line)
+    for line in lines:
+        pdf.cell(0, 10, txt=line, ln=1)
+
 
     os.makedirs("agreements", exist_ok=True)
     uid = data.get("UserID") if user else "generic"

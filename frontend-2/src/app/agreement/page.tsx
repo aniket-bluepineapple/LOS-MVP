@@ -19,6 +19,7 @@ export default function AgreementPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          BorrowerName: "Borrower",
           ApplicationID: Number(appId || 0),
           Amount: Number(amount),
           Tenure: Number(tenure),
@@ -40,12 +41,13 @@ export default function AgreementPage() {
   return (
     <div className="mx-auto mt-10 w-[95%] space-y-4 rounded-3xl bg-white/10 p-6 text-center backdrop-blur md:w-[60%]">
       <h1 className="text-3xl font-bold">Loan Agreement</h1>
+      <p>Application ID: {appId}</p>
       <p>Amount: {amount}</p>
       <p>Tenure: {tenure} years</p>
       <p>Interest Rate: {rate}%</p>
       <p>EMI: {emi}</p>
       <p>Start Date: {start}</p>
-      <p>Application ID: {appId}</p>
+
       <p>
         The borrower agrees to repay the loan in equal monthly instalments
         including interest as specified above. Late payments may incur
